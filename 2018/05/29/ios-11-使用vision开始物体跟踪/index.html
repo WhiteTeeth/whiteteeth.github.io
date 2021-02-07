@@ -28,13 +28,14 @@
 <meta property="og:description" content="ios 11 新出了Vision 框架，提供了人脸识别、物体检测、物体跟踪等技术。本文将通过一个Demo简单介绍如何使用Vision框架进行物体检测和物体跟踪。本文Demo可以在Github上下载。">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6357961-f7e208ccc79f70b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-fd2d7f895427439e.jpg">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-804746537c671b3c.png">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e38d98c0e1c18538.png">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-c3100d87d8966072.png">
 <meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e8ead4ea31f0b1bf.png">
 <meta property="article:published_time" content="2018-05-29T15:10:31.000Z">
-<meta property="article:modified_time" content="2021-02-07T07:42:01.815Z">
+<meta property="article:modified_time" content="2021-02-07T07:45:24.297Z">
 <meta property="article:author" content="Baiya">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg">
@@ -196,7 +197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-07 15:42:01" itemprop="dateModified" datetime="2021-02-07T15:42:01+08:00">2021-02-07</time>
+                <time title="Modified: 2021-02-07 15:45:24" itemprop="dateModified" datetime="2021-02-07T15:45:24+08:00">2021-02-07</time>
               </span>
 
           
@@ -243,6 +244,7 @@
 
 <h1 id="1-关于Vision框架"><a href="#1-关于Vision框架" class="headerlink" title="1. 关于Vision框架"></a>1. 关于Vision框架</h1><p>Vision 是伴随ios 11 推出的基于CoreML的图形处理框架。运用高性能图形处理和视觉技术，可以对图像和视频进行人脸检测、特征点检测和场景识别等。</p>
 <p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg" alt="img"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/6357961-f7e208ccc79f70b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <h1 id="2-使用vision-进行物体识别"><a href="#2-使用vision-进行物体识别" class="headerlink" title="2. 使用vision 进行物体识别"></a>2. 使用vision 进行物体识别</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Xcode 9 + ios 11</p>
 <h2 id="获取图像数据"><a href="#获取图像数据" class="headerlink" title="获取图像数据"></a>获取图像数据</h2><p>该步骤假设你已经调起系统相机，并获得 <code>CMSampleBufferRef</code> 数据。注意返回的simpleBuffer 方向和UIView 显示方向不一致，所以先对simpleBuffer 旋转到正确的方向。</p>
 <p>当然也可以不进行旋转，但是要保证后续坐标转换的一致性。</p>
@@ -339,15 +341,15 @@
           
       <div class="tabs tabs-comment">
         <ul class="nav-tabs">
-            <li class="tab"><a href="#comment-valine">valine</a></li>
             <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane valine" id="comment-valine">
-              <div class="comments" id="valine-comments"></div>
-            </div>
             <div class="tab-pane gitalk" id="comment-gitalk">
               <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
             </div>
         </div>
       </div>
@@ -605,6 +607,26 @@
 
   
 
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : '49f3bb55701ed3a7c6bd23a6672b7a1d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
 
 <script>
 NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
@@ -631,26 +653,6 @@ NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
       serverURLs : ''
     });
   }, window.Valine);
-});
-</script>
-
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
-
-<script>
-NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
-  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
-    var gitalk = new Gitalk({
-      clientID    : 'ce8c6d4734d54af7f015',
-      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
-      repo        : 'whiteteeth.github.io',
-      owner       : 'WhiteTeeth',
-      admin       : ['WhiteTeeth'],
-      id          : '49f3bb55701ed3a7c6bd23a6672b7a1d',
-        language: 'zh-CN',
-      distractionFreeMode: true
-    });
-    gitalk.render('gitalk-container');
-  }, window.Gitalk);
 });
 </script>
 
