@@ -27,18 +27,18 @@
 <meta property="og:site_name" content="Baiya&#39;s Blog">
 <meta property="og:description" content="ios 11 新出了Vision 框架，提供了人脸识别、物体检测、物体跟踪等技术。本文将通过一个Demo简单介绍如何使用Vision框架进行物体检测和物体跟踪。本文Demo可以在Github上下载。">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/6357961-f7e208ccc79f70b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-fd2d7f895427439e.jpg">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-804746537c671b3c.png">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e38d98c0e1c18538.png">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-c3100d87d8966072.png">
-<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e8ead4ea31f0b1bf.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-fd2d7f895427439e.jpg">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-804746537c671b3c.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e38d98c0e1c18538.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-c3100d87d8966072.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e8ead4ea31f0b1bf.png">
 <meta property="article:published_time" content="2018-05-29T15:10:31.000Z">
-<meta property="article:modified_time" content="2021-02-07T07:45:24.297Z">
+<meta property="article:modified_time" content="2021-02-07T07:53:13.528Z">
 <meta property="article:author" content="Baiya">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg">
+<meta name="twitter:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg">
 
 <link rel="canonical" href="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/">
 
@@ -197,7 +197,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-07 15:45:24" itemprop="dateModified" datetime="2021-02-07T15:45:24+08:00">2021-02-07</time>
+                <time title="Modified: 2021-02-07 15:53:13" itemprop="dateModified" datetime="2021-02-07T15:53:13+08:00">2021-02-07</time>
               </span>
 
           
@@ -243,7 +243,7 @@
 <a id="more"></a>
 
 <h1 id="1-关于Vision框架"><a href="#1-关于Vision框架" class="headerlink" title="1. 关于Vision框架"></a>1. 关于Vision框架</h1><p>Vision 是伴随ios 11 推出的基于CoreML的图形处理框架。运用高性能图形处理和视觉技术，可以对图像和视频进行人脸检测、特征点检测和场景识别等。</p>
-<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-f7e208ccc79f70b2.jpg" alt="img"></p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg" alt="img"></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/6357961-f7e208ccc79f70b2.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
 <h1 id="2-使用vision-进行物体识别"><a href="#2-使用vision-进行物体识别" class="headerlink" title="2. 使用vision 进行物体识别"></a>2. 使用vision 进行物体识别</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Xcode 9 + ios 11</p>
 <h2 id="获取图像数据"><a href="#获取图像数据" class="headerlink" title="获取图像数据"></a>获取图像数据</h2><p>该步骤假设你已经调起系统相机，并获得 <code>CMSampleBufferRef</code> 数据。注意返回的simpleBuffer 方向和UIView 显示方向不一致，所以先对simpleBuffer 旋转到正确的方向。</p>
@@ -292,17 +292,17 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- (void)objectTrackWithPixelBuffer:(CVPixelBufferRef)pixelBuffer</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    if (!self.sequenceHandler) &#123;</span><br><span class="line">        self.sequenceHandler &#x3D; [[VNSequenceRequestHandler alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSArray&lt;NSString *&gt; *obsercationKeys &#x3D; self.lastObsercationsDic.allKeys;</span><br><span class="line">    </span><br><span class="line">    NSMutableArray&lt;VNTrackObjectRequest *&gt; *obsercationRequest &#x3D; [NSMutableArray array];</span><br><span class="line">    </span><br><span class="line">    CFAbsoluteTime start &#x3D; CFAbsoluteTimeGetCurrent();</span><br><span class="line">    for (NSString *key in obsercationKeys) &#123;</span><br><span class="line">        </span><br><span class="line">        VNDetectedObjectObservation *obsercation &#x3D; self.lastObsercationsDic[key];</span><br><span class="line">        </span><br><span class="line">        VNTrackObjectRequest *trackObjectRequest &#x3D; [[VNTrackObjectRequest alloc] initWithDetectedObjectObservation:obsercation completionHandler:^(VNRequest * _Nonnull request, NSError * _Nullable error) &#123;</span><br><span class="line">            </span><br><span class="line">            CFAbsoluteTime end &#x3D; CFAbsoluteTimeGetCurrent();</span><br><span class="line">            NSLog(@&quot;跟踪耗时： %f&quot;, end - start);</span><br><span class="line">            </span><br><span class="line">            if (nil &#x3D;&#x3D; error &amp;&amp; request.results.count &gt; 0) &#123;</span><br><span class="line">                </span><br><span class="line">                &#x2F;&#x2F; TODO 处理跟踪结果</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                &#x2F;&#x2F; 跟踪失败处理</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;];</span><br><span class="line">        trackObjectRequest.trackingLevel &#x3D; VNRequestTrackingLevelAccurate;</span><br><span class="line">        </span><br><span class="line">        [obsercationRequest addObject:trackObjectRequest];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    NSError *error &#x3D; nil;</span><br><span class="line">    [self.sequenceHandler performRequests:obsercationRequest onCVPixelBuffer:pixelBuffer error:&amp;error];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
-<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-fd2d7f895427439e.jpg" alt="img"></p>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-fd2d7f895427439e.jpg" alt="img"></p>
 <h1 id="4-性能"><a href="#4-性能" class="headerlink" title="4. 性能"></a>4. 性能</h1><h2 id="测试机型"><a href="#测试机型" class="headerlink" title="测试机型"></a>测试机型</h2><p>iphone6p ios 11.0(15A5318g)</p>
 <p>1/10 取帧率</p>
 <h2 id="物体检测-1"><a href="#物体检测-1" class="headerlink" title="物体检测"></a>物体检测</h2><h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><p>稳定在40M左右</p>
-<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-804746537c671b3c.png" alt="img"></p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-804746537c671b3c.png" alt="img"></p>
 <h3 id="耗时"><a href="#耗时" class="headerlink" title="耗时"></a>耗时</h3><p>平均在50ms左右</p>
-<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e38d98c0e1c18538.png" alt="img"></p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e38d98c0e1c18538.png" alt="img"></p>
 <h2 id="物体跟踪"><a href="#物体跟踪" class="headerlink" title="物体跟踪"></a>物体跟踪</h2><h3 id="内存-1"><a href="#内存-1" class="headerlink" title="内存"></a>内存</h3><p>和物体检测一样在40M左右</p>
-<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-c3100d87d8966072.png" alt="img"></p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-c3100d87d8966072.png" alt="img"></p>
 <h3 id="耗时-1"><a href="#耗时-1" class="headerlink" title="耗时"></a>耗时</h3><p>相对低些，20-40ms不等</p>
-<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA.assets/6357961-e8ead4ea31f0b1bf.png" alt="img"></p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e8ead4ea31f0b1bf.png" alt="img"></p>
 <h1 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h1><p>Vision是一个比较好用的框架，性能也不错。除了物体跟踪，Vision还提供<strong>图像分类</strong>、<strong>人脸识别</strong>、<strong>人脸特征提取</strong>、<strong>人脸追踪</strong>、<strong>文字识别</strong>等功能，使用方法和物体检测类似，本文就不再进行过多描述。</p>
 <h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://github.com/jeffreybergier/Blog-Getting-Started-with-Vision">Getting Started with Vision</a></p>
 
