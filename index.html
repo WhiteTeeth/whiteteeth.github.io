@@ -154,6 +154,473 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/" class="post-title-link" itemprop="url">iOS NSURLSession 之 background session</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-25 00:35:41" itemprop="dateCreated datePublished" datetime="2020-02-25T00:35:41+08:00">2020-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 17:05:24" itemprop="dateModified" datetime="2021-02-07T17:05:24+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/" class="post-meta-item leancloud_visitors" data-flag-title="iOS NSURLSession 之 background session" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>之前有需求需要用到 NSURLSession 的 background session 特性，所以对其做了一波研究并记录下来。主要针对在不同场景下的相关接口回调顺序做些总结。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/25/ios-NSURLSession-%E4%B9%8B-background-session/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">TCP 网络测试工具</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-25 00:33:12" itemprop="dateCreated datePublished" datetime="2020-02-25T00:33:12+08:00">2020-02-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 17:12:20" itemprop="dateModified" datetime="2021-02-07T17:12:20+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" class="post-meta-item leancloud_visitors" data-flag-title="TCP 网络测试工具" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近做了一些网络性能测试的工作，对测试工作有所了解。本文简单记录下用到的工具及使用方法，工具的详细原理日后有机会再做剖析总结。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" class="post-title-link" itemprop="url">Python 动态网页抓取之提取视频源</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:12:42" itemprop="dateCreated datePublished" datetime="2018-05-29T23:12:42+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 17:17:39" itemprop="dateModified" datetime="2021-02-07T17:17:39+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" class="post-meta-item leancloud_visitors" data-flag-title="Python 动态网页抓取之提取视频源" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近遇到一个需求：根据优酷ios客户端分享来的链接，提取出视频源，并在ios系统播放器播放。在踩了一些坑之后，笔者对视频网站的提取也有了一些经验，在此做个总结，为以后遇到这个问题的同学提供一些经验和方向。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/tools-Github%E4%B8%8ESSH/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/29/tools-Github%E4%B8%8ESSH/" class="post-title-link" itemprop="url">Github与SSH</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:11:53" itemprop="dateCreated datePublished" datetime="2018-05-29T23:11:53+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 17:22:38" itemprop="dateModified" datetime="2021-02-07T17:22:38+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2018/05/29/tools-Github%E4%B8%8ESSH/" class="post-meta-item leancloud_visitors" data-flag-title="Github与SSH" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/tools-Github%E4%B8%8ESSH/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/tools-Github%E4%B8%8ESSH/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>由于多年没有用ssh方式登录Github，已经完全忘记怎么在Github上配置SSH。虽然本地存有秘钥，也不会用了。折腾了几个小时，在欢喜之余，也将这次总结纪录下来，以备不时之需。</p>
+<p>本文主要内容是如何在Github上配置SSH。</p>
+<p>其实Github已经有<a target="_blank" rel="noopener" href="https://help.github.com/categories/ssh/">教程</a></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/05/29/tools-Github%E4%B8%8ESSH/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-title-link" itemprop="url">iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:10:24" itemprop="dateCreated datePublished" datetime="2018-05-29T23:10:24+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 16:52:16" itemprop="dateModified" datetime="2021-02-07T16:52:16+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-meta-item leancloud_visitors" data-flag-title="iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>遇到一例案例，<em>iOS 10.1.1</em> 使用<code>CIBlendWithAlphaMask</code> 渲染生成马赛克涂抹效果时，没有渲染出来，改为GPU绘制后，倒就正常了。原因未知，暂且记录下解决方案。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -178,14 +645,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2018-05-29 23:10:31" itemprop="dateCreated datePublished" datetime="2018-05-29T23:10:31+08:00">2018-05-29</time>
+              <time title="Created: 2018-05-29 23:10:14" itemprop="dateCreated datePublished" datetime="2018-05-29T23:10:14+08:00">2018-05-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-07 16:39:49" itemprop="dateModified" datetime="2021-02-07T16:39:49+08:00">2021-02-07</time>
+                <time title="Modified: 2021-02-07 16:53:08" itemprop="dateModified" datetime="2021-02-07T16:53:08+08:00">2021-02-07</time>
               </span>
 
           
@@ -247,6 +714,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/" class="post-title-link" itemprop="url">iOS 创建基于人脸的AR应用</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:08:29" itemprop="dateCreated datePublished" datetime="2018-05-29T23:08:29+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-02-07 16:52:51" itemprop="dateModified" datetime="2021-02-07T16:52:51+08:00">2021-02-07</time>
+              </span>
+
+          
+            <span id="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="iOS 创建基于人脸的AR应用" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文翻译自<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/arkit/creating_face_based_ar_experiences">Creating Face-Based AR Experiences</a>。<br>结合iPhone X的TrueDepth摄像头，进行人脸追踪和表情移植。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-%E9%80%86%E5%90%91%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E4%B8%80%EF%BC%9A%E7%A0%B8%E5%A3%B3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -271,14 +831,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2018-05-29 18:12:52" itemprop="dateCreated datePublished" datetime="2018-05-29T18:12:52+08:00">2018-05-29</time>
+              <time title="Created: 2018-05-29 18:12:15" itemprop="dateCreated datePublished" datetime="2018-05-29T18:12:15+08:00">2018-05-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-07 16:39:33" itemprop="dateModified" datetime="2021-02-07T16:39:33+08:00">2021-02-07</time>
+                <time title="Modified: 2021-02-07 16:52:36" itemprop="dateModified" datetime="2021-02-07T16:52:36+08:00">2021-02-07</time>
               </span>
 
           
@@ -497,12 +1057,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

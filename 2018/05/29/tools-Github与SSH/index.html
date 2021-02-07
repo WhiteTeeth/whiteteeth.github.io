@@ -20,19 +20,21 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+  <meta name="description" content="由于多年没有用ssh方式登录Github，已经完全忘记怎么在Github上配置SSH。虽然本地存有秘钥，也不会用了。折腾了几个小时，在欢喜之余，也将这次总结纪录下来，以备不时之需。 本文主要内容是如何在Github上配置SSH。 其实Github已经有教程">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2015/07/26/hello-world/index.html">
+<meta property="og:title" content="Github与SSH">
+<meta property="og:url" content="http://example.com/2018/05/29/tools-Github%E4%B8%8ESSH/index.html">
 <meta property="og:site_name" content="Baiya&#39;s Blog">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta property="og:description" content="由于多年没有用ssh方式登录Github，已经完全忘记怎么在Github上配置SSH。虽然本地存有秘钥，也不会用了。折腾了几个小时，在欢喜之余，也将这次总结纪录下来，以备不时之需。 本文主要内容是如何在Github上配置SSH。 其实Github已经有教程">
 <meta property="og:locale">
-<meta property="article:published_time" content="2015-07-26T15:10:31.000Z">
-<meta property="article:modified_time" content="2021-02-07T08:35:28.421Z">
+<meta property="article:published_time" content="2018-05-29T15:11:53.000Z">
+<meta property="article:modified_time" content="2021-02-07T09:22:38.291Z">
 <meta property="article:author" content="Baiya">
+<meta property="article:tag" content="Github">
+<meta property="article:tag" content="SSH">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2015/07/26/hello-world/">
+<link rel="canonical" href="http://example.com/2018/05/29/tools-Github%E4%B8%8ESSH/">
 
 
 <script id="page-configurations">
@@ -45,7 +47,7 @@
   };
 </script>
 
-  <title>Hello World | Baiya's Blog</title>
+  <title>Github与SSH | Baiya's Blog</title>
   
 
 
@@ -159,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2015/07/26/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/tools-Github%E4%B8%8ESSH/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          Github与SSH
         </h1>
 
         <div class="post-meta">
@@ -182,18 +184,18 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2015-07-26 23:10:31" itemprop="dateCreated datePublished" datetime="2015-07-26T23:10:31+08:00">2015-07-26</time>
+              <time title="Created: 2018-05-29 23:11:53" itemprop="dateCreated datePublished" datetime="2018-05-29T23:11:53+08:00">2018-05-29</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-02-07 16:35:28" itemprop="dateModified" datetime="2021-02-07T16:35:28+08:00">2021-02-07</time>
+                <time title="Modified: 2021-02-07 17:22:38" itemprop="dateModified" datetime="2021-02-07T17:22:38+08:00">2021-02-07</time>
               </span>
 
           
-            <span id="/2015/07/26/hello-world/" class="post-meta-item leancloud_visitors" data-flag-title="Hello World" title="Views">
+            <span id="/2018/05/29/tools-Github%E4%B8%8ESSH/" class="post-meta-item leancloud_visitors" data-flag-title="Github与SSH" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -215,8 +217,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2015/07/26/hello-world/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2015/07/26/hello-world/" itemprop="commentCount"></span>
+    <a title="valine" href="/2018/05/29/tools-Github%E4%B8%8ESSH/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/tools-Github%E4%B8%8ESSH/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -231,28 +233,39 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+        <p>由于多年没有用ssh方式登录Github，已经完全忘记怎么在Github上配置SSH。虽然本地存有秘钥，也不会用了。折腾了几个小时，在欢喜之余，也将这次总结纪录下来，以备不时之需。</p>
+<p>本文主要内容是如何在Github上配置SSH。</p>
+<p>其实Github已经有<a target="_blank" rel="noopener" href="https://help.github.com/categories/ssh/">教程</a></p>
 <a id="more"></a>
 
-<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="创建博客"><a href="#创建博客" class="headerlink" title="创建博客"></a>创建博客</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="预览"><a href="#预览" class="headerlink" title="预览"></a>预览</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server --debug</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="发布"><a href="#发布" class="headerlink" title="发布"></a>发布</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo g -d</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h2 id="支持图片"><a href="#支持图片" class="headerlink" title="支持图片"></a>支持图片</h2><p>详见<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1600295">Hexo博客写作与图片处理的经验</a></p>
-<ol>
-<li><p>设置 Typora 将图片复制到指定目录</p>
-</li>
-<li><p>修改 hexo 全局配置文件 <code>_config.yml</code> 中的配置：</p>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">post_asset_folder:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
-<li><p>安装<code>hexo-asset-image</code>插件修复博客图片路径问题。</p>
-<figure class="highlight maxima"><table><tr><td class="code"><pre><span class="line">npm install hexo-<span class="built_in">image</span>-link --<span class="built_in">save</span></span><br></pre></td></tr></table></figure>
+<h2 id="生成-ssh-秘钥"><a href="#生成-ssh-秘钥" class="headerlink" title="生成 ssh 秘钥"></a>生成 ssh 秘钥</h2><p>其实很简单，在<strong>终端</strong>执行 <code>ssh-keygen help</code>命令可以看到</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ssh-keygen [-b bits] [-t dsa | ecdsa | ed25519 | rsa | rsa1]</span><br><span class="line">                  [-N new_passphrase] [-C comment] [-f output_keyfile]</span><br></pre></td></tr></table></figure>
+<p><strong>-b</strong> 加密算法秘钥长度<br><strong>-t</strong> 实用的加密算法类型，支持 dsa | ecdsa | ed25519 | rsa | rsa1<br><strong>-N</strong> 秘钥指纹，一般用默认的就好<br><strong>-C</strong> 就是commit<br><strong>-f</strong> 输出的文件名</p>
+<p>实际使用如下：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Baiya:~ baiya$ ssh-keygen -b 4096 -t rsa -C <span class="string">&quot;some commit, whatever&quot;</span> -f github</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase): </span><br><span class="line">Enter same passphrase again: </span><br><span class="line">Your identification has been saved <span class="keyword">in</span> github.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> github.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">SHA256:Ut3vb9oWO3lX3PwgTCIDZ8eAWygHyjH5RNDfUN+5TJc some commit, whatever</span><br></pre></td></tr></table></figure>
+<p><strong>生成的秘钥存放在 <code>~/.ssh/</code> 文件夹下</strong><br><strong>生成的秘钥存放在 <code>~/.ssh/</code> 文件夹下</strong><br><strong>生成的秘钥存放在 <code>~/.ssh/</code> 文件夹下</strong></p>
+<p>进入.ssh文件夹下可以看到秘钥对 <strong><code>github</code></strong> 和 <strong><code>github.pub</code></strong>.</p>
+<ul>
+<li>也可以只输入<code>ssh-keygen</code>命令，然后逐个输入参数</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ ssh-keygen</span><br><span class="line">Generating public/private rsa key pair.</span><br><span class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/schacon/.ssh/id_rsa):</span><br><span class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</span><br><span class="line">Enter same passphrase again:</span><br><span class="line">Your identification has been saved <span class="keyword">in</span> /Users/schacon/.ssh/id_rsa.</span><br><span class="line">Your public key has been saved <span class="keyword">in</span> /Users/schacon/.ssh/id_rsa.pub.</span><br><span class="line">The key fingerprint is:</span><br><span class="line">43:c5:5b:5f:b1:f1:50:43:ad:20:a6:92:6a:1f:9a:3a schacon@agadorlaptop.local</span><br></pre></td></tr></table></figure>
+<h2 id="添加私钥"><a href="#添加私钥" class="headerlink" title="添加私钥"></a>添加私钥</h2><figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">Baiya:Hexo baiya$ ssh-add ~<span class="regexp">/.ssh/gi</span>thub</span><br><span class="line">Enter passphrase <span class="keyword">for</span> ~<span class="regexp">/.ssh/gi</span>thub: </span><br><span class="line">Identity added: ~<span class="regexp">/.ssh/gi</span>thub (<span class="regexp">/Users/</span>baiya<span class="regexp">/.ssh/gi</span>thub)</span><br></pre></td></tr></table></figure>
+<p>确保ssh-agent是打开的：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># start the ssh-agent in the background</span></span><br><span class="line"><span class="built_in">eval</span> <span class="string">&quot;<span class="subst">$(ssh-agent -s)</span>&quot;</span></span><br><span class="line">Agent pid 59566</span><br></pre></td></tr></table></figure>
 
+<h2 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h2><p>配置很简单，进入Github 设置页，选择 <em>SSH and GPG keys</em> -&gt; <em>New SSH key</em>，将上步生成的公钥copy进去即可。</p>
+<p><strong>可以用<code>cat</code>命令查看公钥内容</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Baiya:~ baiya$ cat ~/.ssh/github.pub </span><br></pre></td></tr></table></figure>
+<p>配之后即可以ssh方式访问github</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line"><span class="symbol">Baiya:</span>~ baiya<span class="variable">$ </span>ssh -T git<span class="variable">@github</span>.com</span><br></pre></td></tr></table></figure>
+<h2 id="查看秘钥指纹"><a href="#查看秘钥指纹" class="headerlink" title="查看秘钥指纹"></a>查看秘钥指纹</h2><p>新版SSH默认是以<strong>SHA256</strong>格式输出：</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">ssh</span>-keygen -lf ~/.ssh/id_rsa.pub </span><br><span class="line"><span class="attribute">1024</span> SHA<span class="number">256</span>:<span class="number">19</span>n<span class="number">6</span>fkdz<span class="number">0</span>qqmowiBy<span class="number">6</span>XEaA<span class="number">87</span>EuG/jgWUr<span class="number">44</span>ZSBhJl<span class="number">6</span>Y (DSA)</span><br></pre></td></tr></table></figure>
+<p>如果需要以md5方式输出，还需要加上<code>-E</code>：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">ssh-keygen</span> <span class="selector-tag">-E</span> <span class="selector-tag">md5</span> <span class="selector-tag">-lf</span> ~/<span class="selector-class">.ssh</span>/<span class="selector-tag">id_rsa</span><span class="selector-class">.pub</span></span><br><span class="line">2048 <span class="selector-tag">MD5</span><span class="selector-pseudo">:4d</span><span class="selector-pseudo">:5b</span><span class="selector-pseudo">:97</span><span class="selector-pseudo">:19</span><span class="selector-pseudo">:8c</span><span class="selector-pseudo">:fe</span><span class="selector-pseudo">:06</span><span class="selector-pseudo">:f0</span><span class="selector-pseudo">:29</span><span class="selector-pseudo">:e7</span><span class="selector-pseudo">:f5</span><span class="selector-pseudo">:96</span><span class="selector-pseudo">:77</span><span class="selector-pseudo">:cb</span><span class="selector-pseudo">:3c</span><span class="selector-pseudo">:71</span> (<span class="selector-tag">DSA</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><p><code>ssh-add -l</code> 列出加入的所有秘钥，或者以md5方式输出</p>
+<figure class="highlight dockerfile"><table><tr><td class="code"><pre><span class="line">ssh-<span class="keyword">add</span><span class="bash"> -l -E md5</span></span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://help.github.com/categories/ssh/">Github SSH Help</a><br><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/SSH_keys_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">SSH keys (简体中文)</a><br><a target="_blank" rel="noopener" href="http://www.jinbuguo.com/openssh/ssh-keygen.html">ssh-keygen 中文手册</a></p>
 
     </div>
 
@@ -261,16 +274,23 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Github/" rel="tag"># Github</a>
+              <a href="/tags/SSH/" rel="tag"># SSH</a>
+          </div>
 
         
 
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/2018/05/29/ios-%E9%80%86%E5%90%91%E5%AD%A6%E4%B9%A0%E7%B3%BB%E5%88%97%E4%B9%8B%E4%B8%80%EF%BC%9A%E7%A0%B8%E5%A3%B3/" rel="next" title="iOS 逆向学习系列之一：砸壳">
-      iOS 逆向学习系列之一：砸壳 <i class="fa fa-chevron-right"></i>
+    <a href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="prev" title="iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案">
+      <i class="fa fa-chevron-left"></i> iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" rel="next" title="Python 动态网页抓取之提取视频源">
+      Python 动态网页抓取之提取视频源 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -344,7 +364,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2"><span class="nav-number">1.1.</span> <span class="nav-text">创建博客</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%A7%88"><span class="nav-number">1.2.</span> <span class="nav-text">预览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83"><span class="nav-number">1.3.</span> <span class="nav-text">发布</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%94%AF%E6%8C%81%E5%9B%BE%E7%89%87"><span class="nav-number">2.</span> <span class="nav-text">支持图片</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90-ssh-%E7%A7%98%E9%92%A5"><span class="nav-number">1.</span> <span class="nav-text">生成 ssh 秘钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E7%A7%81%E9%92%A5"><span class="nav-number">2.</span> <span class="nav-text">添加私钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEGithub"><span class="nav-number">3.</span> <span class="nav-text">配置Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%A7%98%E9%92%A5%E6%8C%87%E7%BA%B9"><span class="nav-number">4.</span> <span class="nav-text">查看秘钥指纹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%91%BD%E4%BB%A4"><span class="nav-number">5.</span> <span class="nav-text">其他命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -567,7 +587,7 @@ NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
       repo        : 'whiteteeth.github.io',
       owner       : 'WhiteTeeth',
       admin       : ['WhiteTeeth'],
-      id          : 'fad7cf3e1234049d9a2d8a6627aceb3e',
+      id          : 'cd909551f8a0ede9c3bb10083f7870bc',
         language: 'zh-CN',
       distractionFreeMode: true
     });
