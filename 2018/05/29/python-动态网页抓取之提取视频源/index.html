@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="最近遇到一个需求：根据优酷ios客户端分享来的链接，提取出视频源，并在ios系统播放器播放。在踩了一些坑之后，笔者对视频网站的提取也有了一些经验，在此做个总结，为以后遇到这个问题的同学提供一些经验和方向。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 动态网页抓取之提取视频源">
+<meta property="og:url" content="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/index.html">
+<meta property="og:site_name" content="Baiya&#39;s Blog">
+<meta property="og:description" content="最近遇到一个需求：根据优酷ios客户端分享来的链接，提取出视频源，并在ios系统播放器播放。在踩了一些坑之后，笔者对视频网站的提取也有了一些经验，在此做个总结，为以后遇到这个问题的同学提供一些经验和方向。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/1240-20210207165534415.jpeg">
+<meta property="og:image" content="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/1240-20210207165534483.png">
+<meta property="article:published_time" content="2018-05-29T15:12:42.000Z">
+<meta property="article:modified_time" content="2021-12-09T06:23:08.684Z">
+<meta property="article:author" content="Baiya">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/1240-20210207165534415.jpeg">
+
+<link rel="canonical" href="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Python 动态网页抓取之提取视频源 | Baiya's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?110151ea5147473925df3baed5fc3137";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Baiya's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python 动态网页抓取之提取视频源
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:12:42" itemprop="dateCreated datePublished" datetime="2018-05-29T23:12:42+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-09 14:23:08" itemprop="dateModified" datetime="2021-12-09T14:23:08+08:00">2021-12-09</time>
+              </span>
+
+          
+            <span id="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" class="post-meta-item leancloud_visitors" data-flag-title="Python 动态网页抓取之提取视频源" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近遇到一个需求：根据优酷ios客户端分享来的链接，提取出视频源，并在ios系统播放器播放。在踩了一些坑之后，笔者对视频网站的提取也有了一些经验，在此做个总结，为以后遇到这个问题的同学提供一些经验和方向。</p>
+<span id="more"></span>
+
+<h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h2><p>提取网站视频链接分三种情况：</p>
+<ol start="2">
+<li>电脑版网页链接，在查看这类网页源代码时会发现视频源为flash文件，无法获取有效的视频地址，需要使用第三方库<a target="_blank" rel="noopener" href="https://github.com/soimort/you-get">You-Get</a></li>
+<li>遗憾的是<a target="_blank" rel="noopener" href="https://github.com/soimort/you-get">You-Get</a>并非支持所有的视频网站，对于不能支持的视频网站，需要设置User-Agent模拟iPhone用户进行提取，或者破解其加密方式</li>
+<li>iPhone Safair中的视频源，这个是本文的重点</li>
+</ol>
+<h2 id="2-使用You-Get抓取视频地址"><a href="#2-使用You-Get抓取视频地址" class="headerlink" title="2. 使用You-Get抓取视频地址"></a>2. 使用You-Get抓取视频地址</h2><p><strong>You-Get</strong> 实际上是一个视频下载器，用 <strong>Python3</strong> 编写，运行在命令行环境而不是GUI。它支持很多视频网站，具体可以看<a target="_blank" rel="noopener" href="https://github.com/soimort/you-get#features">Github项目的介绍</a>，并且持续更新中。</p>
+<h3 id="安装You-Get"><a href="#安装You-Get" class="headerlink" title="安装You-Get"></a>安装You-Get</h3><p>You-Get 运行在 Python3 环境下，<strong>不支持Python2.x</strong>。所以在开始之前，系统中至少有一个Python3.x版本。</p>
+<p>虽然项目介绍中说明可以直接编译源码安装，但是如果没有特殊要求，使用 <code>pip</code> 是最简单的安装方式。<br><code>pip</code> 的安装可以查看这篇文章<a target="_blank" rel="noopener" href="https://pip.pypa.io/en/stable/installing.html">pip installation</a>。</p>
+<h4 id="使用pip安装You-get"><a href="#使用pip安装You-get" class="headerlink" title="使用pip安装You-get"></a>使用pip安装You-get</h4><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">$ [sudo] pip3 install you-<span class="builtin-name">get</span>	</span><br></pre></td></tr></table></figure>
+
+<h4 id="检查是否安装成功"><a href="#检查是否安装成功" class="headerlink" title="检查是否安装成功"></a>检查是否安装成功</h4><figure class="highlight routeros"><table><tr><td class="code"><pre><span class="line">$ you-<span class="builtin-name">get</span> -V</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用You-Get下载视频"><a href="#使用You-Get下载视频" class="headerlink" title="使用You-Get下载视频"></a>使用You-Get下载视频</h3><figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line">$ you-<span class="keyword">get</span> http:<span class="comment">//youtu.be/sGwy8DsUJ4M</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="显示视频信息"><a href="#显示视频信息" class="headerlink" title="显示视频信息"></a>显示视频信息</h4><figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line">$ you-<span class="keyword">get</span> -u http:<span class="comment">//youtu.be/sGwy8DsUJ4M</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>you-get －u $link</code>返回视频信息，然后用正则表达式将视频链接提取出来即可。</p>
+<h3 id="一些问题"><a href="#一些问题" class="headerlink" title="一些问题"></a>一些问题</h3><ol>
+<li>ios系统播放器只支持mp4和mov等少数几种视频格式。但是在下载的视频中很多是flv格式，无法在系统播放器中播放。</li>
+<li>手机中分享来的视频网址无法使用You-Get提取视频。</li>
+<li>You-Get并非支持所有视频网站。</li>
+</ol>
+<h2 id="3-提取手机Safari的视频链接"><a href="#3-提取手机Safari的视频链接" class="headerlink" title="3. 提取手机Safari的视频链接"></a>3. 提取手机Safari的视频链接</h2><p>虽然ios系统不支持flv等视频格式，但是优酷等网站在safari中仍可以播放。所以笔者猜测在手机端视频并非以falsh文件方式播放。通过设置如下 User-Agent 模拟手机浏览器访问视频网站，在源代码中可以得到视频链接。</p>
+<figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="attribute">Mozilla</span>/<span class="number">5</span>.<span class="number">0</span> (iPhone; CPU iPhone OS <span class="number">8</span>_<span class="number">1</span> like Mac OS X) AppleWebKit/<span class="number">600</span>.<span class="number">1</span>.<span class="number">4</span> (KHTML, like Gecko) Version/<span class="number">8</span>.<span class="number">0</span> Mobile/<span class="number">12</span>B<span class="number">410</span> Safari/<span class="number">600</span>.<span class="number">1</span>.<span class="number">4</span></span><br></pre></td></tr></table></figure>
+
+<p>视频链接 <a target="_blank" rel="noopener" href="http://v.youku.com/v_show/id_XMTMzMzkxNzgwOA==_ev_1.html?x">http://v.youku.com/v_show/id_XMTMzMzkxNzgwOA==_ev_1.html?x</a></p>
+<p><img src="python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/1240-20210207165534415.jpeg" alt="image"></p>
+<p>以及网页源代码</p>
+<p><img src="python-%E5%8A%A8%E6%80%81%E7%BD%91%E9%A1%B5%E6%8A%93%E5%8F%96%E4%B9%8B%E6%8F%90%E5%8F%96%E8%A7%86%E9%A2%91%E6%BA%90/1240-20210207165534483.png" alt="image"></p>
+<p>图中src就是我们需要的内容。</p>
+<p>知道了源码中含有视频链接就好办多了，只要我们获取到源码，然后利用正则表达式提取出视频链接即可。但是，尝试后发现，视频标签部分是动态获取的，破解js比较麻烦，而且并不通用，所以这里采用一种简单粗暴的方案：</p>
+<pre><code>在服务器端运行一个虚拟窗口，通过调用浏览器加载网页，并对最终代码做正则提取出视频地址。
+</code></pre>
+<h3 id="运行环境"><a href="#运行环境" class="headerlink" title="运行环境"></a>运行环境</h3><p>CentOs系统，使用python3.4版本，1M带宽，FireFox浏览器</p>
+<h3 id="使用Splinter调用浏览器"><a href="#使用Splinter调用浏览器" class="headerlink" title="使用Splinter调用浏览器"></a>使用Splinter调用浏览器</h3><p>Splinter是一款Python自动化测试工具，可以模拟浏览器的行为。可以运行js，支持鼠标操作等。</p>
+<p>安装稳定版</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">$ [sudo] pip <span class="keyword">install</span> splinter</span><br></pre></td></tr></table></figure>
+<p>或者源码安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git <span class="built_in">clone</span> git://github.com/cobrateam/splinter.git</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> splinter</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> [sudo] python setup.py install</span></span><br></pre></td></tr></table></figure>
+
+<p>代码示例</p>
+<figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="keyword">browser </span>= <span class="keyword">Browser()</span></span><br><span class="line"><span class="keyword"></span><span class="keyword">browser.visit(url)</span></span><br><span class="line"><span class="keyword"></span>html = <span class="keyword">browser.html</span></span><br><span class="line"><span class="keyword"></span></span><br><span class="line"><span class="keyword">browser.quit()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="运行虚拟桌面"><a href="#运行虚拟桌面" class="headerlink" title="运行虚拟桌面"></a>运行虚拟桌面</h3><p>centos服务器是没有桌面的。为了能在服务器中调用浏览器进行渲染，笔者在centos命令行界面运行一个虚拟的桌面。<code>Xvfb</code>新建一个虚拟的X窗口，配合python的<code>pyvirtualdisplay</code>进行操作。</p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装Xvfb和pyvirtualdisplay</span></span><br><span class="line">yum <span class="keyword">install </span><span class="keyword">xorg-x11-server-Xvfb</span></span><br><span class="line"><span class="keyword"></span>pip <span class="keyword">install </span>pyvirtualdisplay</span><br></pre></td></tr></table></figure>
+
+<p>安装<code>firefox</code>和<code>selenium</code></p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">yum <span class="keyword">install</span> firefox</span><br><span class="line">pip <span class="keyword">install</span> selenium</span><br></pre></td></tr></table></figure>
+
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h4><figure class="highlight sas"><table><tr><td class="code"><pre><span class="line"><span class="meta">from</span> pyvirtualdisplay import <span class="meta">Display</span></span><br><span class="line"><span class="meta">from</span> selenium import webdriver</span><br><span class="line"></span><br><span class="line"><span class="meta">display</span> = <span class="meta">Display</span>(visible=0, size=(800, 600))</span><br><span class="line"><span class="meta">display</span>.start()</span><br><span class="line"></span><br><span class="line">browser = webdriver.Firefox()</span><br><span class="line">browser.get(<span class="string">&#x27;http://www.baidu.com&#x27;</span>)</span><br><span class="line">print browser.<span class="meta">title</span></span><br><span class="line">browser.quit()</span><br><span class="line"></span><br><span class="line"><span class="meta">display</span>.<span class="meta">stop</span>()</span><br></pre></td></tr></table></figure>
+
+<!-- ### 关于Headless 浏览器 -->
+
+
+
+
+<h3 id="Talk-is-cheap-Show-me-the-fucking-code"><a href="#Talk-is-cheap-Show-me-the-fucking-code" class="headerlink" title="Talk is cheap, Show me the fucking code"></a>Talk is cheap, Show me the fucking code</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> splinter <span class="keyword">import</span> Browser</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver <span class="keyword">import</span> PhantomJS, DesiredCapabilities</span><br><span class="line"><span class="keyword">from</span> splinter.driver.webdriver <span class="keyword">import</span> (BaseWebDriver, WebDriverElement <span class="keyword">as</span> BaseWebDriverElement)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pyvirtualdisplay <span class="keyword">import</span> Display</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fetch_info</span>(<span class="params">url</span>):</span></span><br><span class="line">  html = download_html(url)</span><br><span class="line">  videoUrl = parse_html(url, html)</span><br><span class="line"></span><br><span class="line">  resultDic = &#123;<span class="string">&#x27;ret&#x27;</span> : <span class="number">0</span>, <span class="string">&#x27;srcUrl&#x27;</span> : url, <span class="string">&#x27;title&#x27;</span> : url, <span class="string">&#x27;abstract&#x27;</span> : url, <span class="string">&#x27;qsvideo&#x27;</span> : videoUrl&#125;</span><br><span class="line">  <span class="built_in">print</span>(json.dumps(resultDic))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download_html</span>(<span class="params">url</span>):</span></span><br><span class="line">  display = Display(visible=<span class="number">0</span>, size=(<span class="number">800</span>, <span class="number">600</span>))</span><br><span class="line">  display.start()</span><br><span class="line"></span><br><span class="line">  browser = Browser(user_agent=<span class="string">&quot;Mozilla/5.0 (iPhone; CPU iPhone OS 8_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/8.0 Mobile/12B410 Safari/600.1.4&quot;</span>)</span><br><span class="line">  browser.visit(url)</span><br><span class="line">  html = browser.html</span><br><span class="line"></span><br><span class="line">  browser.quit()</span><br><span class="line">  display.stop()</span><br><span class="line">  <span class="keyword">return</span> html</span><br><span class="line">  <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse_html</span>(<span class="params">url, html</span>):</span></span><br><span class="line">  matchObj = re.search(<span class="string">r&#x27;&lt;div class=&quot;tvp_video&quot;&gt;&lt;video(.*)src=&quot;(.*)&quot;&gt;&lt;/video&gt;&#x27;</span>, html)</span><br><span class="line">  <span class="keyword">if</span> matchObj:</span><br><span class="line">    videoUrl = matchObj.group(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> videoUrl</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line">  <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">  url = <span class="string">&quot;http://v.youku.com/v_show/id_XMTMyOTU4NTc4OA==.html&quot;</span></span><br><span class="line">  fetch_info(url)</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-第二种情况"><a href="#4-第二种情况" class="headerlink" title="4. 第二种情况"></a>4. 第二种情况</h2><p>对于第二种情况，You-Get不能支持的视频网站，需要设置User-Agent伪装为iPhone用户进行提取，或者破解其加密方式。</p>
+<h2 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h2><p>总的来说，这是一种可行的抓取方案。但是，因为需要浏览器启动加载网页，对于条件比较苛刻的环境中效率相对较低。就笔者而言，在1M的带宽中抓取一个视频链接需要几十秒的时间，这几乎是不能忍受的。因此如何在低带宽中提高速度仍需要挖掘。目前猜测耗时可能是因为加载网页时下载图片导致，具体原因还需要详细调查验证。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://github.com/soimort/you-get">you-get github</a><br><a target="_blank" rel="noopener" href="https://pip.pypa.io/en/stable/index.html">pip</a><br><a target="_blank" rel="noopener" href="http://splinter.readthedocs.org/en/latest/index.html">Splinter</a><br><a target="_blank" rel="noopener" href="http://www.phpgao.com/headless_selenium.html">linux无界面(headless)使用selenium抓取数据</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/29/tools-Github%E4%B8%8ESSH/" rel="prev" title="Github与SSH">
+      <i class="fa fa-chevron-left"></i> Github与SSH
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/02/25/tcp-%E7%BD%91%E7%BB%9C%E6%B5%8B%E8%AF%95%E5%B7%A5%E5%85%B7/" rel="next" title="TCP 网络测试工具">
+      TCP 网络测试工具 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1. 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8You-Get%E6%8A%93%E5%8F%96%E8%A7%86%E9%A2%91%E5%9C%B0%E5%9D%80"><span class="nav-text">2. 使用You-Get抓取视频地址</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85You-Get"><span class="nav-text">安装You-Get</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8pip%E5%AE%89%E8%A3%85You-get"><span class="nav-text">使用pip安装You-get</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="nav-text">检查是否安装成功</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8You-Get%E4%B8%8B%E8%BD%BD%E8%A7%86%E9%A2%91"><span class="nav-text">使用You-Get下载视频</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E8%A7%86%E9%A2%91%E4%BF%A1%E6%81%AF"><span class="nav-text">显示视频信息</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E9%97%AE%E9%A2%98"><span class="nav-text">一些问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%8F%90%E5%8F%96%E6%89%8B%E6%9C%BASafari%E7%9A%84%E8%A7%86%E9%A2%91%E9%93%BE%E6%8E%A5"><span class="nav-text">3. 提取手机Safari的视频链接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E7%8E%AF%E5%A2%83"><span class="nav-text">运行环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Splinter%E8%B0%83%E7%94%A8%E6%B5%8F%E8%A7%88%E5%99%A8"><span class="nav-text">使用Splinter调用浏览器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E8%99%9A%E6%8B%9F%E6%A1%8C%E9%9D%A2"><span class="nav-text">运行虚拟桌面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81"><span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Talk-is-cheap-Show-me-the-fucking-code"><span class="nav-text">Talk is cheap, Show me the fucking code</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E7%AC%AC%E4%BA%8C%E7%A7%8D%E6%83%85%E5%86%B5"><span class="nav-text">4. 第二种情况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%B0%8F%E7%BB%93"><span class="nav-text">5. 小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-text">参考资料</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Baiya</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Baiya</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz","app_key":"nTz617bzWhN9TKo3rlYI2KHG","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : 'adc56dccad4b1f7cee3c722c945bba5e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz',
+      appKey     : 'nTz617bzWhN9TKo3rlYI2KHG',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

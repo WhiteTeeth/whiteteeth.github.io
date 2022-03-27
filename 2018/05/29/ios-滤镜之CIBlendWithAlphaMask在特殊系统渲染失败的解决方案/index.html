@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="遇到一例案例，iOS 10.1.1 使用CIBlendWithAlphaMask 渲染生成马赛克涂抹效果时，没有渲染出来，改为GPU绘制后，倒就正常了。原因未知，暂且记录下解决方案。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案">
+<meta property="og:url" content="http://example.com/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/index.html">
+<meta property="og:site_name" content="Baiya&#39;s Blog">
+<meta property="og:description" content="遇到一例案例，iOS 10.1.1 使用CIBlendWithAlphaMask 渲染生成马赛克涂抹效果时，没有渲染出来，改为GPU绘制后，倒就正常了。原因未知，暂且记录下解决方案。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2018-05-29T15:10:24.000Z">
+<meta property="article:modified_time" content="2021-12-09T06:23:08.684Z">
+<meta property="article:author" content="Baiya">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案 | Baiya's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?110151ea5147473925df3baed5fc3137";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Baiya's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:10:24" itemprop="dateCreated datePublished" datetime="2018-05-29T23:10:24+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-09 14:23:08" itemprop="dateModified" datetime="2021-12-09T14:23:08+08:00">2021-12-09</time>
+              </span>
+
+          
+            <span id="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" class="post-meta-item leancloud_visitors" data-flag-title="iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>遇到一例案例，<em>iOS 10.1.1</em> 使用<code>CIBlendWithAlphaMask</code> 渲染生成马赛克涂抹效果时，没有渲染出来，改为GPU绘制后，倒就正常了。原因未知，暂且记录下解决方案。</p>
+<span id="more"></span>
+
+<p>已知问题机型：</p>
+<pre><code>iphone 7p     iOS 10.1.1
+iphone 6sp     iOS 10.1.1
+iphone 6        iOS 10.1.1
+(iphone 5 iOS 10.1.1 没有问题)
+</code></pre>
+<p>原实现：</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="built_in">CIImage</span> *resultImage = [[<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CIBlendWithAlphaMask&quot;</span></span><br><span class="line">                                       keysAndValues:kCIInputImageKey, ciOutputImagePixellate,</span><br><span class="line">                                                    kCIInputMaskImageKey, maskImage,</span><br><span class="line">                                                    kCIInputBackgroundImageKey, ciInputImage, <span class="literal">nil</span>]</span><br><span class="line">                            valueForKey:kCIOutputImageKey];</span><br><span class="line"></span><br><span class="line"><span class="built_in">CIContext</span> *ciContext = [<span class="built_in">CIContext</span> contextWithOptions:<span class="literal">nil</span>];</span><br><span class="line"><span class="built_in">CGImageRef</span> cgImage = [ciContext createCGImage:resultImage fromRect:[resultImage extent]];</span><br><span class="line"></span><br><span class="line"><span class="built_in">CGImageRef</span> cgImage = [ciContext createCGImage:resultImage fromRect:[resultImage extent]];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 获取UIImage</span></span><br><span class="line"><span class="built_in">UIImage</span> *filteredImage = [<span class="built_in">UIImage</span> imageWithCGImage:cgImage];</span><br><span class="line"><span class="built_in">CGImageRelease</span>(cgImage);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>修改后实现方案：</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line"><span class="built_in">CIImage</span> *resultImage = [[<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CIBlendWithAlphaMask&quot;</span></span><br><span class="line">                                       keysAndValues:kCIInputImageKey, ciOutputImagePixellate,</span><br><span class="line">                                                    kCIInputMaskImageKey, maskImage,</span><br><span class="line">                                                    kCIInputBackgroundImageKey, ciInputImage, <span class="literal">nil</span>]</span><br><span class="line">                            valueForKey:kCIOutputImageKey];</span><br><span class="line">                            </span><br><span class="line">EAGLContext *glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];</span><br><span class="line"></span><br><span class="line"><span class="built_in">CIContext</span> *ciContext = [<span class="built_in">CIContext</span> contextWithEAGLContext:glContext</span><br><span class="line">                                                     options:@&#123;kCIContextWorkingColorSpace : [<span class="built_in">NSNull</span> null]&#125;];</span><br><span class="line">    </span><br><span class="line"><span class="built_in">CGImageRef</span> cgImage = [ciContext createCGImage:resultImage fromRect:[resultImage extent]];</span><br><span class="line">    </span><br><span class="line"><span class="comment">// 获取UIImage</span></span><br><span class="line"><span class="built_in">UIImage</span> *filteredImage = [<span class="built_in">UIImage</span> imageWithCGImage:cgImage];</span><br><span class="line"><span class="built_in">CGImageRelease</span>(cgImage);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<p>附上图片部分马赛克的源码：</p>
+<figure class="highlight objectivec"><table><tr><td class="code"><pre><span class="line">- (<span class="built_in">UIImage</span> *)demoCoreImageFilter &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">UIImage</span> *originImage = [<span class="built_in">UIImage</span> imageNamed:<span class="string">@&quot;facetest&quot;</span>];</span><br><span class="line">    <span class="comment">// 导入CIImage</span></span><br><span class="line">    <span class="built_in">CIImage</span> *ciInputImage = [[<span class="built_in">CIImage</span> alloc] initWithImage:originImage];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 创建CIFilter</span></span><br><span class="line">    <span class="built_in">CIFilter</span> *filterPixellate = [<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CIPixellate&quot;</span>];</span><br><span class="line">    [filterPixellate setValue:ciInputImage forKey:kCIInputImageKey];</span><br><span class="line">    [filterPixellate setDefaults];</span><br><span class="line">    [filterPixellate setValue:@<span class="number">32</span> forKey:<span class="string">@&quot;inputScale&quot;</span>];</span><br><span class="line">    <span class="built_in">NSLog</span>(<span class="string">@&quot;filterPixellate : %@&quot;</span>, filterPixellate.attributes);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取滤镜效果之后的CIImage</span></span><br><span class="line">    <span class="built_in">CIImage</span> *ciOutputImagePixellate = [filterPixellate valueForKey:kCIOutputImageKey];</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 人脸识别</span></span><br><span class="line">    <span class="built_in">CIDetector</span> *detector = [<span class="built_in">CIDetector</span> detectorOfType:<span class="built_in">CIDetectorTypeFace</span></span><br><span class="line">                                              context:<span class="literal">nil</span></span><br><span class="line">                                              options:<span class="literal">nil</span>];</span><br><span class="line">    <span class="built_in">NSArray</span> *faceArray = [detector featuresInImage:ciInputImage options:<span class="literal">nil</span>];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// Create a green circle to cover the rects that are returned.</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">CIImage</span> *maskImage = <span class="literal">nil</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">CIFeature</span> *f <span class="keyword">in</span> faceArray) &#123;</span><br><span class="line">        <span class="built_in">CGFloat</span> centerX = f.bounds.origin.x + f.bounds.size.width / <span class="number">2.0</span>;</span><br><span class="line">        <span class="built_in">CGFloat</span> centerY = f.bounds.origin.y + f.bounds.size.height / <span class="number">2.0</span>;</span><br><span class="line">        <span class="built_in">CGFloat</span> radius = MIN(f.bounds.size.width, f.bounds.size.height) / <span class="number">1.5</span>;</span><br><span class="line">        <span class="built_in">CIFilter</span> *radialGradient = [<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CIRadialGradient&quot;</span> withInputParameters:@&#123;</span><br><span class="line">                                                                                                      <span class="string">@&quot;inputRadius0&quot;</span>: @(radius),</span><br><span class="line">                                                                                                      <span class="string">@&quot;inputRadius1&quot;</span>: @(radius + <span class="number">1.0</span>f),</span><br><span class="line">                                                                                                      <span class="string">@&quot;inputColor0&quot;</span>: [<span class="built_in">CIColor</span> colorWithRed:<span class="number">0.0</span> green:<span class="number">1.0</span> blue:<span class="number">0.0</span> alpha:<span class="number">1.0</span>],</span><br><span class="line">                                                                                                      <span class="string">@&quot;inputColor1&quot;</span>: [<span class="built_in">CIColor</span> colorWithRed:<span class="number">0.0</span> green:<span class="number">0.0</span> blue:<span class="number">0.0</span> alpha:<span class="number">0.0</span>],</span><br><span class="line">                                                                                                      kCIInputCenterKey: [<span class="built_in">CIVector</span> vectorWithX:centerX Y:centerY],</span><br><span class="line">                                                                                                      &#125;];</span><br><span class="line">        <span class="built_in">CIImage</span> *circleImage = [radialGradient valueForKey:kCIOutputImageKey];</span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">nil</span> == maskImage)</span><br><span class="line">            maskImage = circleImage;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            maskImage = [[<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CISourceOverCompositing&quot;</span> withInputParameters:@&#123;</span><br><span class="line">                                                                                                   kCIInputImageKey: circleImage,</span><br><span class="line">                                                                                                   kCIInputBackgroundImageKey: maskImage,</span><br><span class="line">                                                                                                   &#125;] valueForKey:kCIOutputImageKey];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">CIImage</span> *resultImage = [[<span class="built_in">CIFilter</span> filterWithName:<span class="string">@&quot;CIBlendWithAlphaMask&quot;</span></span><br><span class="line">                                       keysAndValues:kCIInputImageKey, ciOutputImagePixellate,</span><br><span class="line">                                                    kCIInputMaskImageKey, maskImage,</span><br><span class="line">                                                    kCIInputBackgroundImageKey, ciInputImage, <span class="literal">nil</span>]</span><br><span class="line">                            valueForKey:kCIOutputImageKey];</span><br><span class="line">    </span><br><span class="line">    EAGLContext *glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];</span><br><span class="line">    <span class="built_in">CIContext</span> *ciContext = [<span class="built_in">CIContext</span> contextWithEAGLContext:glContext</span><br><span class="line">                                                     options:@&#123;kCIContextWorkingColorSpace : [<span class="built_in">NSNull</span> null]&#125;];</span><br><span class="line">    <span class="built_in">CGImageRef</span> cgImage = [ciContext createCGImage:resultImage fromRect:[resultImage extent]];</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 获取UIImage</span></span><br><span class="line">    <span class="built_in">UIImage</span> *filteredImage = [<span class="built_in">UIImage</span> imageWithCGImage:cgImage];</span><br><span class="line">    <span class="built_in">CGImageRelease</span>(cgImage);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> filteredImage;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>代码讲解：</p>
+<ol>
+<li>将原图马赛克化，得到一张马赛克后的图片 ciOutputImagePixellate</li>
+<li>对原图人脸识别，并取识别后的人脸区域 maskImage</li>
+<li>使用 CIBlendWithAlphaMask 滤镜进行合成</li>
+<li>指定GPU 渲染</li>
+</ol>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/content/documentation/GraphicsImaging/Conceptual/CoreImaging/ci_filer_recipes/ci_filter_recipes.html#//apple_ref/doc/uid/TP30001185-CH4-SW1">Anonymous Faces Filter Recipe</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/" rel="tag"># 图像处理</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/" rel="prev" title="iOS 11 使用vision开始物体跟踪">
+      <i class="fa fa-chevron-left"></i> iOS 11 使用vision开始物体跟踪
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/29/tools-Github%E4%B8%8ESSH/" rel="next" title="Github与SSH">
+      Github与SSH <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Baiya</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Baiya</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz","app_key":"nTz617bzWhN9TKo3rlYI2KHG","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : 'eb0c0a7e90bc6d08103a67477c82b2ca',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz',
+      appKey     : 'nTz617bzWhN9TKo3rlYI2KHG',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

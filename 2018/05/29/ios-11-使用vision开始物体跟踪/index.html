@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="ios 11 新出了Vision 框架，提供了人脸识别、物体检测、物体跟踪等技术。本文将通过一个Demo简单介绍如何使用Vision框架进行物体检测和物体跟踪。本文Demo可以在Github上下载。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 11 使用vision开始物体跟踪">
+<meta property="og:url" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/index.html">
+<meta property="og:site_name" content="Baiya&#39;s Blog">
+<meta property="og:description" content="ios 11 新出了Vision 框架，提供了人脸识别、物体检测、物体跟踪等技术。本文将通过一个Demo简单介绍如何使用Vision框架进行物体检测和物体跟踪。本文Demo可以在Github上下载。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-fd2d7f895427439e.jpg">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-804746537c671b3c.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e38d98c0e1c18538.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-c3100d87d8966072.png">
+<meta property="og:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e8ead4ea31f0b1bf.png">
+<meta property="article:published_time" content="2018-05-29T15:10:14.000Z">
+<meta property="article:modified_time" content="2021-12-09T06:23:08.662Z">
+<meta property="article:author" content="Baiya">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg">
+
+<link rel="canonical" href="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>iOS 11 使用vision开始物体跟踪 | Baiya's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?110151ea5147473925df3baed5fc3137";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Baiya's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          iOS 11 使用vision开始物体跟踪
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-29 23:10:14" itemprop="dateCreated datePublished" datetime="2018-05-29T23:10:14+08:00">2018-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-09 14:23:08" itemprop="dateModified" datetime="2021-12-09T14:23:08+08:00">2021-12-09</time>
+              </span>
+
+          
+            <span id="/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/" class="post-meta-item leancloud_visitors" data-flag-title="iOS 11 使用vision开始物体跟踪" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2018/05/29/ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ios 11 新出了<a target="_blank" rel="noopener" href="https://developer.apple.com/documentation/vision">Vision</a> 框架，提供了人脸识别、物体检测、物体跟踪等技术。本文将通过一个Demo简单介绍如何使用Vision框架进行物体检测和物体跟踪。本文Demo可以在<a target="_blank" rel="noopener" href="https://github.com/WhiteTeeth/ios11-ObjectTrackDemo">Github</a>上下载。</p>
+<span id="more"></span>
+
+<h1 id="1-关于Vision框架"><a href="#1-关于Vision框架" class="headerlink" title="1. 关于Vision框架"></a>1. 关于Vision框架</h1><p>Vision 是伴随ios 11 推出的基于CoreML的图形处理框架。运用高性能图形处理和视觉技术，可以对图像和视频进行人脸检测、特征点检测和场景识别等。</p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-f7e208ccc79f70b2.jpg" alt="img"></p>
+<h1 id="2-使用vision-进行物体识别"><a href="#2-使用vision-进行物体识别" class="headerlink" title="2. 使用vision 进行物体识别"></a>2. 使用vision 进行物体识别</h1><h2 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h2><p>Xcode 9 + ios 11</p>
+<h2 id="获取图像数据"><a href="#获取图像数据" class="headerlink" title="获取图像数据"></a>获取图像数据</h2><p>该步骤假设你已经调起系统相机，并获得 <code>CMSampleBufferRef</code> 数据。注意返回的simpleBuffer 方向和UIView 显示方向不一致，所以先对simpleBuffer 旋转到正确的方向。</p>
+<p>当然也可以不进行旋转，但是要保证后续坐标转换的一致性。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">/*</span><br><span class="line"> * 注意旋转SampleBuffer 为argb或者bgra格式，其他格式可能不支持</span><br><span class="line"> * rotationConstant:</span><br><span class="line"> *  0 -- rotate 0 degrees (simply copy the data from src to dest)</span><br><span class="line"> *  1 -- rotate 90 degrees counterclockwise</span><br><span class="line"> *  2 -- rotate 180 degress</span><br><span class="line"> *  3 -- rotate 270 degrees counterclockwise</span><br><span class="line"> */</span><br><span class="line">+ (CVPixelBufferRef)rotateBuffer:(CMSampleBufferRef)sampleBuffer withConstant:(uint8_t)rotationConstant</span><br><span class="line">&#123;</span><br><span class="line">    CVImageBufferRef imageBuffer        = CMSampleBufferGetImageBuffer(sampleBuffer);</span><br><span class="line">    CVPixelBufferLockBaseAddress(imageBuffer, 0);</span><br><span class="line">    </span><br><span class="line">    OSType pixelFormatType              = CVPixelBufferGetPixelFormatType(imageBuffer);</span><br><span class="line">    </span><br><span class="line">//    NSAssert(pixelFormatType == kCVPixelFormatType_32ARGB, @&quot;Code works only with 32ARGB format. Test/adapt for other formats!&quot;);</span><br><span class="line">    </span><br><span class="line">    const size_t kAlignment_32ARGB      = 32;</span><br><span class="line">    const size_t kBytesPerPixel_32ARGB  = 4;</span><br><span class="line">    </span><br><span class="line">    size_t bytesPerRow                  = CVPixelBufferGetBytesPerRow(imageBuffer);</span><br><span class="line">    size_t width                        = CVPixelBufferGetWidth(imageBuffer);</span><br><span class="line">    size_t height                       = CVPixelBufferGetHeight(imageBuffer);</span><br><span class="line">    </span><br><span class="line">    BOOL rotatePerpendicular            = (rotationConstant == 1) || (rotationConstant == 3); // Use enumeration values here</span><br><span class="line">    const size_t outWidth               = rotatePerpendicular ? height : width;</span><br><span class="line">    const size_t outHeight              = rotatePerpendicular ? width  : height;</span><br><span class="line">    </span><br><span class="line">    size_t bytesPerRowOut               = kBytesPerPixel_32ARGB * ceil(outWidth * 1.0 / kAlignment_32ARGB) * kAlignment_32ARGB;</span><br><span class="line">    </span><br><span class="line">    const size_t dstSize                = bytesPerRowOut * outHeight * sizeof(unsigned char);</span><br><span class="line">    </span><br><span class="line">    void *srcBuff                       = CVPixelBufferGetBaseAddress(imageBuffer);</span><br><span class="line">    </span><br><span class="line">    unsigned char *dstBuff              = (unsigned char *)malloc(dstSize);</span><br><span class="line">    </span><br><span class="line">    vImage_Buffer inbuff                = &#123;srcBuff, height, width, bytesPerRow&#125;;</span><br><span class="line">    vImage_Buffer outbuff               = &#123;dstBuff, outHeight, outWidth, bytesPerRowOut&#125;;</span><br><span class="line">    </span><br><span class="line">    uint8_t bgColor[4]                  = &#123;0, 0, 0, 0&#125;;</span><br><span class="line">    </span><br><span class="line">    vImage_Error err                    = vImageRotate90_ARGB8888(&amp;inbuff, &amp;outbuff, rotationConstant, bgColor, 0);</span><br><span class="line">    if (err != kvImageNoError)</span><br><span class="line">    &#123;</span><br><span class="line">        NSLog(@&quot;%ld&quot;, err);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    CVPixelBufferUnlockBaseAddress(imageBuffer, 0);</span><br><span class="line">    </span><br><span class="line">    CVPixelBufferRef rotatedBuffer      = NULL;</span><br><span class="line">    CVPixelBufferCreateWithBytes(NULL,</span><br><span class="line">                                 outWidth,</span><br><span class="line">                                 outHeight,</span><br><span class="line">                                 pixelFormatType,</span><br><span class="line">                                 outbuff.data,</span><br><span class="line">                                 bytesPerRowOut,</span><br><span class="line">                                 freePixelBufferDataAfterRelease,</span><br><span class="line">                                 NULL,</span><br><span class="line">                                 NULL,</span><br><span class="line">                                 &amp;rotatedBuffer);</span><br><span class="line">    </span><br><span class="line">    return rotatedBuffer;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void freePixelBufferDataAfterRelease(void *releaseRefCon, const void *baseAddress)</span><br><span class="line">&#123;</span><br><span class="line">    // Free the memory we malloced for the vImage rotation</span><br><span class="line">    free((void *)baseAddress);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="物体检测"><a href="#物体检测" class="headerlink" title="物体检测"></a>物体检测</h2><p>拿到图像数据后就可以进行物体检测，物体检测流程很简单：</p>
+<ol>
+<li>创建一个物体检测请求 VNDetectRectanglesRequest</li>
+<li>根据数据源(pixelBuffer 或者 UIImage)创建一个 VNImageRequestHandler</li>
+<li>调用[VNImageRequestHandler performRequests] 执行检测</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- (void)detectObjectWithPixelBuffer:(CVPixelBufferRef)pixelBuffer</span><br><span class="line">&#123;</span><br><span class="line">    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();</span><br><span class="line">    </span><br><span class="line">    void (^ VNRequestCompletionHandler)(VNRequest *request, NSError * _Nullable error) = ^(VNRequest *request, NSError * _Nullable error)</span><br><span class="line">    &#123;</span><br><span class="line">        CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();</span><br><span class="line">        </span><br><span class="line">        NSLog(@&quot;检测耗时： %f&quot;, end - start);</span><br><span class="line">        if (!error &amp;&amp; request.results.count &gt; 0) &#123;</span><br><span class="line">            // TODO 这里处理检测结果</span><br><span class="line">            return ;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    VNImageRequestHandler *handler = [[VNImageRequestHandler alloc] initWithCVPixelBuffer:pixelBuffer options:@&#123;&#125;];</span><br><span class="line">    VNDetectRectanglesRequest *request = [[VNDetectRectanglesRequest alloc] initWithCompletionHandler:VNRequestCompletionHandler];</span><br><span class="line">    request.minimumAspectRatio = 0.1;	// 最小长宽比设为0.1</span><br><span class="line">    request.maximumObservations = 0;		// 不限制检测结果</span><br><span class="line">    [handler performRequests:@[request] error:nil];</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="显示检测结果"><a href="#显示检测结果" class="headerlink" title="显示检测结果"></a>显示检测结果</h2><p>物体检测返回结果是一个 <code>VNDetectedObjectObservation</code> 的结果集，包含<code>confidence</code>, <code>uuid</code> 和 <code>boundingBox</code>三种属性。 因为vision坐标系类似opengl的纹理坐标系，以屏幕左下角为坐标原点，并做了归一化。所以将显示结果投影到屏幕时，还需要进行坐标系的转换。</p>
+<p>三种坐标系的区别：</p>
+<table>
+<thead>
+<tr>
+<th>坐标系</th>
+<th>原点</th>
+<th>长宽</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UIKit坐标系</td>
+<td>左上角</td>
+<td>屏幕大小</td>
+</tr>
+<tr>
+<td>AVFoundation坐标系</td>
+<td>左上角</td>
+<td>0 - 1</td>
+</tr>
+<tr>
+<td>Vision坐标系</td>
+<td>左下角</td>
+<td>0 - 1</td>
+</tr>
+</tbody></table>
+<p>显示代码如下，使用<code>CGAffineTransform </code>进行坐标转换，并根据转换后矩形绘制红色边框。同时打印<code>confidence</code>信息到屏幕上。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- (void)overlayImageWithSize:(CGSize)size</span><br><span class="line">&#123;</span><br><span class="line">    </span><br><span class="line">    NSDictionary *lastObsercationDicCopy = [NSDictionary dictionaryWithDictionary:self.lastObsercationsDic];</span><br><span class="line">    NSArray *keyArr = [lastObsercationDicCopy allKeys];</span><br><span class="line">    </span><br><span class="line">    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(size.width, size.height)];</span><br><span class="line">    </span><br><span class="line">    void (^UIGraphicsImageDrawingActions)(UIGraphicsImageRendererContext *rendererContext) = ^(UIGraphicsImageRendererContext *rendererContext)</span><br><span class="line">    &#123;</span><br><span class="line">    	 // 将vision坐标转换为屏幕坐标</span><br><span class="line">        CGAffineTransform  transform = CGAffineTransformIdentity;</span><br><span class="line">        transform = CGAffineTransformScale(transform, size.width, -size.height);</span><br><span class="line">        transform = CGAffineTransformTranslate(transform, 0, -1);</span><br><span class="line">        </span><br><span class="line">        for (NSString *uuid in keyArr) &#123;</span><br><span class="line">            VNDetectedObjectObservation *rectangleObservation = lastObsercationDicCopy[uuid];</span><br><span class="line">            </span><br><span class="line">            // 绘制红框</span><br><span class="line">            [[UIColor redColor] setStroke];</span><br><span class="line">            UIBezierPath *path = [UIBezierPath bezierPathWithRect:CGRectApplyAffineTransform(rectangleObservation.boundingBox, transform)];</span><br><span class="line">            path.lineWidth = 4.0f;</span><br><span class="line">            [path stroke];</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    UIImage *overlayImage = [renderer imageWithActions:UIGraphicsImageDrawingActions];</span><br><span class="line">    </span><br><span class="line">    NSMutableString *trackInfoStr = [NSMutableString string];</span><br><span class="line">    </span><br><span class="line">    for (NSString *uuid in keyArr) &#123;</span><br><span class="line">        VNDetectedObjectObservation *rectangleObservation = lastObsercationDicCopy[uuid];</span><br><span class="line">        </span><br><span class="line">        [trackInfoStr appendFormat:@&quot;置信度 ： %.2f \n&quot;, rectangleObservation.confidence];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line">        </span><br><span class="line">        self.highlightView.image = overlayImage;</span><br><span class="line">        </span><br><span class="line">        self.infoLabel.text = trackInfoStr;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;   </span><br><span class="line">    </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="3-物体跟踪"><a href="#3-物体跟踪" class="headerlink" title="3. 物体跟踪"></a>3. 物体跟踪</h1><p>物体跟踪需要处理连续的视频帧，所以需要创建<code>VNSequenceRequestHandler</code>处理多帧图像。同时还需要一个<code>VNDetectedObjectObservation</code>对象 做为参考源。你可以使用物体检测的结果，或者指定一个矩形作为物体跟踪的参考源。注意因为坐标系不同，如果直接指定矩形作为参考源时，需要事先进行正确的坐标转换。</p>
+<p>跟踪多物体时，可以使用<code>VNDetectedObjectObservation.uuid</code>区分跟踪对象，并做相应处理。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">- (void)objectTrackWithPixelBuffer:(CVPixelBufferRef)pixelBuffer</span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">    if (!self.sequenceHandler) &#123;</span><br><span class="line">        self.sequenceHandler = [[VNSequenceRequestHandler alloc] init];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    NSArray&lt;NSString *&gt; *obsercationKeys = self.lastObsercationsDic.allKeys;</span><br><span class="line">    </span><br><span class="line">    NSMutableArray&lt;VNTrackObjectRequest *&gt; *obsercationRequest = [NSMutableArray array];</span><br><span class="line">    </span><br><span class="line">    CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();</span><br><span class="line">    for (NSString *key in obsercationKeys) &#123;</span><br><span class="line">        </span><br><span class="line">        VNDetectedObjectObservation *obsercation = self.lastObsercationsDic[key];</span><br><span class="line">        </span><br><span class="line">        VNTrackObjectRequest *trackObjectRequest = [[VNTrackObjectRequest alloc] initWithDetectedObjectObservation:obsercation completionHandler:^(VNRequest * _Nonnull request, NSError * _Nullable error) &#123;</span><br><span class="line">            </span><br><span class="line">            CFAbsoluteTime end = CFAbsoluteTimeGetCurrent();</span><br><span class="line">            NSLog(@&quot;跟踪耗时： %f&quot;, end - start);</span><br><span class="line">            </span><br><span class="line">            if (nil == error &amp;&amp; request.results.count &gt; 0) &#123;</span><br><span class="line">                </span><br><span class="line">                // TODO 处理跟踪结果</span><br><span class="line">                </span><br><span class="line">                </span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                // 跟踪失败处理</span><br><span class="line">                </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;];</span><br><span class="line">        trackObjectRequest.trackingLevel = VNRequestTrackingLevelAccurate;</span><br><span class="line">        </span><br><span class="line">        [obsercationRequest addObject:trackObjectRequest];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    NSError *error = nil;</span><br><span class="line">    [self.sequenceHandler performRequests:obsercationRequest onCVPixelBuffer:pixelBuffer error:&amp;error];</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-fd2d7f895427439e.jpg" alt="img"></p>
+<h1 id="4-性能"><a href="#4-性能" class="headerlink" title="4. 性能"></a>4. 性能</h1><h2 id="测试机型"><a href="#测试机型" class="headerlink" title="测试机型"></a>测试机型</h2><p>iphone6p ios 11.0(15A5318g)</p>
+<p>1/10 取帧率</p>
+<h2 id="物体检测-1"><a href="#物体检测-1" class="headerlink" title="物体检测"></a>物体检测</h2><h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><p>稳定在40M左右</p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-804746537c671b3c.png" alt="img"></p>
+<h3 id="耗时"><a href="#耗时" class="headerlink" title="耗时"></a>耗时</h3><p>平均在50ms左右</p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e38d98c0e1c18538.png" alt="img"></p>
+<h2 id="物体跟踪"><a href="#物体跟踪" class="headerlink" title="物体跟踪"></a>物体跟踪</h2><h3 id="内存-1"><a href="#内存-1" class="headerlink" title="内存"></a>内存</h3><p>和物体检测一样在40M左右</p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-c3100d87d8966072.png" alt="img"></p>
+<h3 id="耗时-1"><a href="#耗时-1" class="headerlink" title="耗时"></a>耗时</h3><p>相对低些，20-40ms不等</p>
+<p><img src="ios-11-%E4%BD%BF%E7%94%A8vision%E5%BC%80%E5%A7%8B%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA/6357961-e8ead4ea31f0b1bf.png" alt="img"></p>
+<h1 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h1><p>Vision是一个比较好用的框架，性能也不错。除了物体跟踪，Vision还提供<strong>图像分类</strong>、<strong>人脸识别</strong>、<strong>人脸特征提取</strong>、<strong>人脸追踪</strong>、<strong>文字识别</strong>等功能，使用方法和物体检测类似，本文就不再进行过多描述。</p>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://github.com/jeffreybergier/Blog-Getting-Started-with-Vision">Getting Started with Vision</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag"># 机器学习</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2018/05/29/ios-%E5%88%9B%E5%BB%BA%E5%9F%BA%E4%BA%8E%E4%BA%BA%E8%84%B8%E7%9A%84AR%E5%BA%94%E7%94%A8/" rel="prev" title="iOS 创建基于人脸的AR应用">
+      <i class="fa fa-chevron-left"></i> iOS 创建基于人脸的AR应用
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/29/ios-%E6%BB%A4%E9%95%9C%E4%B9%8BCIBlendWithAlphaMask%E5%9C%A8%E7%89%B9%E6%AE%8A%E7%B3%BB%E7%BB%9F%E6%B8%B2%E6%9F%93%E5%A4%B1%E8%B4%A5%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/" rel="next" title="iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案">
+      iOS 滤镜之CIBlendWithAlphaMask在特殊系统渲染失败的解决方案 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%85%B3%E4%BA%8EVision%E6%A1%86%E6%9E%B6"><span class="nav-text">1. 关于Vision框架</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8vision-%E8%BF%9B%E8%A1%8C%E7%89%A9%E4%BD%93%E8%AF%86%E5%88%AB"><span class="nav-text">2. 使用vision 进行物体识别</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83"><span class="nav-text">环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%9B%BE%E5%83%8F%E6%95%B0%E6%8D%AE"><span class="nav-text">获取图像数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B"><span class="nav-text">物体检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E6%A3%80%E6%B5%8B%E7%BB%93%E6%9E%9C"><span class="nav-text">显示检测结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA"><span class="nav-text">3. 物体跟踪</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%88%E6%9E%9C%E5%9B%BE"><span class="nav-text">效果图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E6%80%A7%E8%83%BD"><span class="nav-text">4. 性能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E6%9C%BA%E5%9E%8B"><span class="nav-text">测试机型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E4%BD%93%E6%A3%80%E6%B5%8B-1"><span class="nav-text">物体检测</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98"><span class="nav-text">内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%97%E6%97%B6"><span class="nav-text">耗时</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E4%BD%93%E8%B7%9F%E8%B8%AA"><span class="nav-text">物体跟踪</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98-1"><span class="nav-text">内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%97%E6%97%B6-1"><span class="nav-text">耗时</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%80%BB%E7%BB%93"><span class="nav-text">5. 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-text">参考文档</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Baiya</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Baiya</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz","app_key":"nTz617bzWhN9TKo3rlYI2KHG","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : '49f3bb55701ed3a7c6bd23a6672b7a1d',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz',
+      appKey     : 'nTz617bzWhN9TKo3rlYI2KHG',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

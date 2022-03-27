@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文简单介绍下 cocoapod 使用，及编写 podspec 文件时遇到的一些问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CocoaPods 实践">
+<meta property="og:url" content="http://example.com/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="Baiya&#39;s Blog">
+<meta property="og:description" content="本文简单介绍下 cocoapod 使用，及编写 podspec 文件时遇到的一些问题。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/1590933941_37_w1000_h635.png">
+<meta property="article:published_time" content="2020-05-31T14:25:04.000Z">
+<meta property="article:modified_time" content="2021-12-09T06:23:08.735Z">
+<meta property="article:author" content="Baiya">
+<meta property="article:tag" content="cocoapods">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/1590933941_37_w1000_h635.png">
+
+<link rel="canonical" href="http://example.com/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>CocoaPods 实践 | Baiya's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?110151ea5147473925df3baed5fc3137";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Baiya's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CocoaPods 实践
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-05-31 22:25:04" itemprop="dateCreated datePublished" datetime="2020-05-31T22:25:04+08:00">2020-05-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-12-09 14:23:08" itemprop="dateModified" datetime="2021-12-09T14:23:08+08:00">2021-12-09</time>
+              </span>
+
+          
+            <span id="/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/" class="post-meta-item leancloud_visitors" data-flag-title="CocoaPods 实践" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文简单介绍下 cocoapod 使用，及编写 podspec 文件时遇到的一些问题。</p>
+<span id="more"></span>
+
+<h2 id="使用-cocoapods"><a href="#使用-cocoapods" class="headerlink" title="使用 cocoapods"></a>使用 cocoapods</h2><h3 id="创建-Podfile"><a href="#创建-Podfile" class="headerlink" title="创建 Podfile"></a>创建 Podfile</h3><p>进入项目中和.xcodeproj同级的文件夹，创建Podfile文件。</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">touch Podfile</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="编辑-Podfile"><a href="#编辑-Podfile" class="headerlink" title="编辑 Podfile"></a>编辑 Podfile</h3><figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Uncomment this line to define a global platform for your project</span></span><br><span class="line"></span><br><span class="line">platform <span class="symbol">:ios</span>, <span class="string">&#x27;8.0&#x27;</span></span><br><span class="line"></span><br><span class="line">target <span class="string">&#x27;TestCocoaPods&#x27;</span> <span class="keyword">do</span></span><br><span class="line">  pod <span class="string">&#x27;SDWebImage&#x27;</span>, <span class="string">&#x27;~&gt; 4.3.2&#x27;</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>版本号有多种表示方式，其中：</p>
+<ol>
+<li>‘&gt;=1.0’ 最低版本号为1.0</li>
+<li>‘&lt;=1.0’ 最高版本号为1.0</li>
+<li>‘~&gt;1.0’ 兼容1.0的版本的最新版本</li>
+</ol>
+<p>使用私有库</p>
+<figure class="highlight elixir"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 注意替换私有git域名</span></span><br><span class="line">pod <span class="string">&#x27;ProjectName&#x27;</span>, <span class="symbol">:git=&gt;<span class="string">&quot;https://XXX.git&quot;</span></span></span><br></pre></td></tr></table></figure>
+<p>使用本地库</p>
+<figure class="highlight arcade"><table><tr><td class="code"><pre><span class="line">pod <span class="string">&#x27;CocoaPodDemo&#x27;</span>, :<span class="function"><span class="params">path</span> =&gt;</span> <span class="string">&#x27;../CocoaPodDemo/&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">pod <span class="keyword">install</span></span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">pod <span class="keyword">install</span> --repo-update</span><br></pre></td></tr></table></figure>
+
+<p>如果有需求修改依赖的第三方库的版本号，修改完毕之后，执行命令：</p>
+<figure class="highlight ebnf"><table><tr><td class="code"><pre><span class="line"><span class="attribute">pod update</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="开源项目支持-cocoapod"><a href="#开源项目支持-cocoapod" class="headerlink" title="开源项目支持 cocoapod"></a>开源项目支持 cocoapod</h2><h3 id="新建-podspec-文件"><a href="#新建-podspec-文件" class="headerlink" title="新建 podspec 文件"></a>新建 podspec 文件</h3><figure class="highlight arcade"><table><tr><td class="code"><pre><span class="line">pod spec create <span class="symbol">$podspec</span>Name</span><br></pre></td></tr></table></figure>
+
+<h3 id="编辑podspec文件"><a href="#编辑podspec文件" class="headerlink" title="编辑podspec文件"></a>编辑podspec文件</h3><p>示例如下</p>
+<figure class="highlight nix"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Pod::Spec.new do |spec|</span><br><span class="line"></span><br><span class="line">  <span class="comment"># ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  These will help people to find your library, and whilst it</span></span><br><span class="line">  <span class="comment">#  can feel like a chore to fill in it&#x27;s definitely to your advantage. The</span></span><br><span class="line">  <span class="comment">#  summary should be tweet-length, and the description more in depth.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">name</span>         = <span class="string">&quot;CocoaPodDemo&quot;</span></span><br><span class="line">  spec.<span class="attr">version</span>      = <span class="string">&quot;0.0.2&quot;</span></span><br><span class="line">  spec.<span class="attr">summary</span>      = <span class="string">&quot;A short meaningful description of CocoaPodDemo.&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># This description is used to generate tags and improve search results.</span></span><br><span class="line">  <span class="comment">#   * Think: What does it do? Why did you write it? What is the focus?</span></span><br><span class="line">  <span class="comment">#   * Try to keep it short, snappy and to the point.</span></span><br><span class="line">  <span class="comment">#   * Write the description between the DESC delimiters below.</span></span><br><span class="line">  <span class="comment">#   * Finally, don&#x27;t worry about the indent, CocoaPods strips it!</span></span><br><span class="line">  spec.<span class="attr">description</span>  = &lt;&lt;-DESC</span><br><span class="line">  A long long long long long long description of CocoaPodDemo.</span><br><span class="line">                   DESC</span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">homepage</span>     = <span class="string">&quot;https://github.com/WhiteTeeth/CocoaPodDemo&quot;</span></span><br><span class="line">  <span class="comment"># spec.screenshots  = &quot;www.example.com/screenshots_1.gif&quot;, &quot;www.example.com/screenshots_2.gif&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  Licensing your code is important. See https://choosealicense.com for more info.</span></span><br><span class="line">  <span class="comment">#  CocoaPods will detect a license file if there is a named LICENSE*</span></span><br><span class="line">  <span class="comment">#  Popular ones are &#x27;MIT&#x27;, &#x27;BSD&#x27; and &#x27;Apache License, Version 2.0&#x27;.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">license</span>      = <span class="string">&quot;MIT&quot;</span></span><br><span class="line">  <span class="comment"># spec.license      = &#123; :type =&gt; &quot;MIT&quot;, :file =&gt; &quot;FILE_LICENSE&quot; &#125;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  Specify the authors of the library, with email addresses. Email addresses</span></span><br><span class="line">  <span class="comment">#  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also</span></span><br><span class="line">  <span class="comment">#  accepts just a name if you&#x27;d rather not provide an email address.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  Specify a social_media_url where others can refer to, for example a twitter</span></span><br><span class="line">  <span class="comment">#  profile URL.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">author</span>             = &#123; <span class="string">&quot;baiya&quot;</span> =&gt; <span class="string">&quot;baiya@test.com&quot;</span> &#125;</span><br><span class="line">  spec.<span class="attr">social_media_url</span>   = <span class="string">&quot;https://github.com/WhiteTeeth&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  If this Pod runs only on iOS or OS X, then specify the platform and</span></span><br><span class="line">  <span class="comment">#  the deployment target. You can optionally include the target after the platform.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.platform     = :ios</span></span><br><span class="line">  <span class="comment"># spec.platform     = :ios, &quot;5.0&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">#  When using multiple platforms</span></span><br><span class="line">  <span class="comment"># spec.ios.deployment_target = &quot;5.0&quot;</span></span><br><span class="line">  <span class="comment"># spec.osx.deployment_target = &quot;10.7&quot;</span></span><br><span class="line">  <span class="comment"># spec.watchos.deployment_target = &quot;2.0&quot;</span></span><br><span class="line">  <span class="comment"># spec.tvos.deployment_target = &quot;9.0&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  Specify the location from where the source should be retrieved.</span></span><br><span class="line">  <span class="comment">#  Supports git, hg, bzr, svn and HTTP.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">source</span>       = &#123; :<span class="attr">git</span> =&gt; <span class="string">&quot;https://github.com/WhiteTeeth/CocoaPodDemo.git&quot;</span>, :<span class="attr">tag</span> =&gt; <span class="string">&quot;#&#123;spec.version&#125;&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  CocoaPods is smart about how it includes source code. For source files</span></span><br><span class="line">  <span class="comment">#  giving a folder will include any swift, h, m, mm, c &amp; cpp files.</span></span><br><span class="line">  <span class="comment">#  For header files it will include any header in the folder.</span></span><br><span class="line">  <span class="comment">#  Not including the public_header_files will make all headers public.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  spec.<span class="attr">source_files</span>  = <span class="string">&quot;CocoaPodDemo&quot;</span>, <span class="string">&quot;CocoaPodDemo/**/*.&#123;h,m&#125;&quot;</span></span><br><span class="line">  spec.subspec &#x27;Group&#x27; do |subspec|</span><br><span class="line">    subspec.<span class="attr">source_files</span> = <span class="string">&quot;CocoaPodDemo/Group&quot;</span>, <span class="string">&quot;CocoaPodDemo/Group/**/*.&#123;h,m&#125;&quot;</span></span><br><span class="line">  end</span><br><span class="line">  <span class="comment"># spec.exclude_files = &quot;Classes/Exclude&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.public_header_files = &quot;Classes/**/*.h&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  A list of resources included with the Pod. These are copied into the</span></span><br><span class="line">  <span class="comment">#  target bundle with a build phase script. Anything else will be cleaned.</span></span><br><span class="line">  <span class="comment">#  You can preserve files from being cleaned, please don&#x27;t preserve</span></span><br><span class="line">  <span class="comment">#  non-essential files like tests, examples and documentation.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.resource  = &quot;icon.png&quot;</span></span><br><span class="line">  <span class="comment"># spec.resources = &quot;Resources/*.png&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.preserve_paths = &quot;FilesToSave&quot;, &quot;MoreFilesToSave&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  Link your library with frameworks, or libraries. Libraries do not include</span></span><br><span class="line">  <span class="comment">#  the lib prefix of their name.</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.framework  = &quot;SomeFramework&quot;</span></span><br><span class="line">  <span class="comment"># spec.frameworks = &quot;SomeFramework&quot;, &quot;AnotherFramework&quot;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.library   = &quot;iconv&quot;</span></span><br><span class="line">  <span class="comment"># spec.libraries = &quot;iconv&quot;, &quot;xml2&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  <span class="comment"># ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></span><br><span class="line">  <span class="comment">#</span></span><br><span class="line">  <span class="comment">#  If your library depends on compiler flags you can set them in the xcconfig hash</span></span><br><span class="line">  <span class="comment">#  where they will only apply to your library. If you depend on other Podspecs</span></span><br><span class="line">  <span class="comment">#  you can include multiple dependencies to ensure it works.</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.requires_arc = true</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># spec.xcconfig = &#123; &quot;HEADER_SEARCH_PATHS&quot; =&gt; &quot;$(SDKROOT)/usr/include/libxml2&quot; &#125;</span></span><br><span class="line">  <span class="comment"># spec.dependency &quot;JSONKit&quot;, &quot;~&gt; 1.4&quot;</span></span><br><span class="line"></span><br><span class="line">end</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>license 有多种协议，常见的6种关系如下：</p>
+<p><img src="tools-CocoaPods-%E5%AE%9E%E8%B7%B5/1590933941_37_w1000_h635.png"></p>
+<p>更多标签参考 <a target="_blank" rel="noopener" href="https://guides.cocoapods.org/syntax/podspec.html#specification">Podspec Syntax Reference</a></p>
+<h3 id="分支新建tag，并推送到远程仓库"><a href="#分支新建tag，并推送到远程仓库" class="headerlink" title="分支新建tag，并推送到远程仓库"></a>分支新建tag，并推送到远程仓库</h3><figure class="highlight apache"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 新建tag</span></span><br><span class="line"><span class="attribute">git</span> tag <span class="number">1</span>.<span class="number">1</span>.<span class="number">0</span></span><br><span class="line"><span class="comment"># 将本地的tag推送到远程仓库</span></span><br><span class="line"><span class="attribute">git</span> push --tags</span><br></pre></td></tr></table></figure>
+
+<h3 id="验证podspec文件，解决提示的问题"><a href="#验证podspec文件，解决提示的问题" class="headerlink" title="验证podspec文件，解决提示的问题"></a>验证podspec文件，解决提示的问题</h3><figure class="highlight autoit"><table><tr><td class="code"><pre><span class="line"><span class="meta"># 本地验证</span></span><br><span class="line">pod lib lint $podspecName</span><br><span class="line"><span class="meta"># 远程验证</span></span><br><span class="line">pod spec lint $podspecName</span><br></pre></td></tr></table></figure>
+
+<h3 id="提交至CocoaPods"><a href="#提交至CocoaPods" class="headerlink" title="提交至CocoaPods"></a>提交至CocoaPods</h3><p>略</p>
+<p>发布至私有库</p>
+<p>1). 添加仓库</p>
+<figure class="highlight jboss-cli"><table><tr><td class="code"><pre><span class="line">pod spec lint <span class="params">--sources=</span>&#x27;https:<span class="string">//git.code.oa.com/QQFrameworks/pod_specs</span>,https:<span class="string">//github.com/CocoaPods/Specs</span>&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>2). 验证需要提交的 xx.podspec</p>
+<figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">pod</span> <span class="comment">spec</span> <span class="comment">lint</span> <span class="comment">xx</span><span class="string">.</span><span class="comment">podspec</span> --<span class="comment">allow</span><span class="literal">-</span><span class="comment">warnings</span> --<span class="comment">no</span><span class="literal">-</span><span class="comment">clean</span>  --<span class="comment">verbose</span> --<span class="comment">use</span><span class="literal">-</span><span class="comment">libraries</span></span><br></pre></td></tr></table></figure>
+
+<p>3). 推送到 QQFrameworks/pod_specs</p>
+<figure class="highlight brainfuck"><table><tr><td class="code"><pre><span class="line"><span class="comment">pod</span> <span class="comment">repo</span> <span class="comment">push</span> <span class="comment">oa</span><span class="literal">-</span><span class="comment">qqframeworks</span><span class="literal">-</span><span class="comment">pod_specs</span> <span class="comment">xx</span><span class="string">.</span><span class="comment">podspec</span> --<span class="comment">allow</span><span class="literal">-</span><span class="comment">warnings</span>  --<span class="comment">verbose</span> --<span class="comment">use</span><span class="literal">-</span><span class="comment">libraries</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h2><h3 id="私有库增加依赖"><a href="#私有库增加依赖" class="headerlink" title="私有库增加依赖"></a>私有库增加依赖</h3><figure class="highlight crmsh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">spec</span>.dependency <span class="string">&quot;JSONKit&quot;</span>, <span class="string">&quot;~&gt; 1.4&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="设置-arc-或者-mrc"><a href="#设置-arc-或者-mrc" class="headerlink" title="设置 arc 或者 mrc"></a>设置 arc 或者 mrc</h3><p>是否是ARC,默认true,如果不是,会自动添加<code>-fno-objc-arc</code> compiler flag</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.requires_arc</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<p>如果只是部分文件是 arc, 参考下面设置：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="comment">#该文件夹下是ARC,其它非ARC</span></span><br><span class="line"><span class="attr">spec.requires_arc</span> = <span class="string">&#x27;Classes/Arc&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.requires_arc</span> = [<span class="string">&#x27;Classes/*ARC.m&#x27;</span>, <span class="string">&#x27;Classes/ARC.mm&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>如果想再 arc 工程中标记部分文件为 mrc，可以通过子模块设置，参考下面设置：</p>
+<figure class="highlight vala"><table><tr><td class="code"><pre><span class="line"><span class="meta">#添加需要mrc标识的文件，为相对路径</span></span><br><span class="line">non_arc_files = <span class="string">&#x27;xxx/aa.m&#x27;</span>,<span class="string">&#x27;xxx/xxx.m&#x27;</span></span><br><span class="line"><span class="meta">#从工程中排除</span></span><br><span class="line">s.exclude_files = non_arc_files</span><br><span class="line"><span class="meta">#为需要添加mrc标识的文件添加子设置</span></span><br><span class="line">s.subspec <span class="string">&#x27;no-arc&#x27;</span> <span class="keyword">do</span> |sp|</span><br><span class="line">    sp.source_files = non_arc_files</span><br><span class="line">    sp.requires_arc = <span class="literal">false</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Header-Search-Path"><a href="#Header-Search-Path" class="headerlink" title="Header Search Path"></a>Header Search Path</h3><p>设置头文件搜索路径:</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">s.xcconfig = &#123; <span class="string">&#x27;USER_HEADER_SEARCH_PATHS&#x27;</span> =&gt; <span class="string">&#x27;&quot;<span class="subst">$&#123;PROJECT_DIR&#125;</span>/..&quot;&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>设置头文件递归搜索:</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">s.xcconfig = &#123; <span class="string">&#x27;USER_HEADER_SEARCH_PATHS&#x27;</span> =&gt; <span class="string">&#x27;&quot;<span class="subst">$&#123;PROJECT_DIR&#125;</span>/..&quot;/**&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>header search path 设置相对 podspec 的路径</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line"><span class="comment">#对于HEADER_SEARCH_PATHS，对将设置的字符串直接拷贝到xcode中，不会像上面source_files这样使用相对路径。</span></span><br><span class="line"><span class="comment">#所以，在这里先获取当前路径，再设置进去。最后加**表示recursive，即循环查找子目录的意思</span></span><br><span class="line"><span class="variable">$dir</span> = File.dirname(<span class="keyword">__FILE__</span>)</span><br><span class="line"><span class="variable">$dir</span> = <span class="variable">$dir</span> + <span class="string">&quot;/MyLibrary/cfiles/**&quot;</span>  <span class="comment">#$dir:/Users/wangbing/TempCode/MyLibrary/cfiles/**</span></span><br><span class="line">subcfiles.pod_target_xcconfig = &#123; <span class="string">&quot;HEADER_SEARCH_PATHS&quot;</span> =&gt; <span class="variable">$dir</span>&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Library-Framework-Search-Path"><a href="#Library-Framework-Search-Path" class="headerlink" title="Library/Framework Search Path"></a>Library/Framework Search Path</h3><p>Library Search Path 和 Header Search Path 类似，在<code>xcconfig</code>中添加</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.xcconfig</span> = &#123; <span class="string">&#x27;FRAMEWORK_SEARCH_PATHS&#x27;</span> =&gt; <span class="string">&#x27;&quot;$(SRCROOT)/libs/Frameworks/Huoyan&quot;&#x27;</span> &#125;   </span><br><span class="line">  </span><br><span class="line"><span class="attr">spec.xcconfig</span>  = &#123; <span class="string">&#x27;LIBRARY_SEARCH_PATHS&#x27;</span> =&gt; <span class="string">&#x27;&quot;$(PODS_ROOT)/iOS_Util/iOS_Util/AMR/lib&quot;&#x27;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">spec.xcconfig</span>  = &#123; <span class="string">&quot;HEADER_SEARCH_PATHS&quot;</span> =&gt; <span class="string">&quot;$&#123;PODS_ROOT&#125;/boost&quot;</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="attr">spec.xcconfig</span> = &#123; <span class="string">&#x27;HEADER_SEARCH_PATHS&#x27;</span> =&gt; <span class="string">&#x27;$(SDKROOT)/usr/include/libxml2&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="添加-pch-文件"><a href="#添加-pch-文件" class="headerlink" title="添加 pch 文件"></a>添加 pch 文件</h3><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.prefix_header_file</span> = <span class="string">&#x27;SDKDemo/SDKDemo-Prefix.pch&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者通过下面方式在对应 pod 的 pch 文件中添加一行</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">s.prefix_header_contents</span> = <span class="string">&#x27;#import &quot;SomeClass.h&quot;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="支持-c"><a href="#支持-c" class="headerlink" title="支持 c++"></a>支持 c++</h3><figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">s.<span class="keyword">library</span> = <span class="string">&#x27;c++&#x27;</span></span><br><span class="line">s.xcconfig = &#123;</span><br><span class="line">    <span class="string">&#x27;CLANG_CXX_LANGUAGE_STANDARD&#x27;</span> =&gt; <span class="string">&#x27;compiler-default&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;CLANG_CXX_LIBRARY&#x27;</span> =&gt; <span class="string">&#x27;libc++&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>支持 c++ 11</p>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">s.xcconfig = &#123;</span><br><span class="line">    <span class="string">&#x27;CLANG_CXX_LANGUAGE_STANDARD&#x27;</span> =&gt; <span class="string">&#x27;c++11&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;CLANG_CXX_LIBRARY&#x27;</span> =&gt; <span class="string">&#x27;libc++&#x27;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="引入系统库"><a href="#引入系统库" class="headerlink" title="引入系统库"></a>引入系统库</h3><p>引入系统 framwork</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.framework</span> = <span class="string">&quot;CoreTelephony&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spec.frameworks</span> = <span class="string">&quot;CoreTelephony&quot;</span>, <span class="string">&quot;SystemConfiguration&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>引入系统 library</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">spec.library</span>   = <span class="string">&quot;resolv&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spec.libraries</span> = <span class="string">&quot;c++&quot;</span>, <span class="string">&quot;resolv&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="创建subspec"><a href="#创建subspec" class="headerlink" title="创建subspec"></a>创建subspec</h3><figure class="highlight mipsasm"><table><tr><td class="code"><pre><span class="line"><span class="comment">#创建一个subspec</span></span><br><span class="line">s.<span class="keyword">subspec </span><span class="string">&#x27;MyLibraryMain&#x27;</span> do <span class="title">|submain|</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#引入代码文件</span></span><br><span class="line">    <span class="keyword">submain.source_files </span>= <span class="string">&quot;MyLibrary/main/**/*.&#123;h,m&#125;&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设置公开头文件</span></span><br><span class="line">    <span class="keyword">submain.public_header_files </span>= <span class="string">&quot;MyLibrary/main/public.h&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设置资源文件</span></span><br><span class="line">    <span class="keyword">submain.resource </span> = <span class="string">&quot;MyLibrary/resources/configFiles.bundle&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设置MyLibraryMain模块依赖的系统库，注意，这里加的是系统库</span></span><br><span class="line">    <span class="keyword">submain.frameworks </span>= <span class="string">&quot;SystemConfiguration&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">#设置依赖，这里可以依赖当前spec中的subspec，也可以依赖github上公开的开源库，如&#x27;AFNetworking&#x27;。</span></span><br><span class="line">    <span class="keyword">submain.dependency </span><span class="string">&quot;MyLibrary/MyLibraryCFiles&quot;</span></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<h2 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h2><ol>
+<li><p>私有库通过 podspec git 方式源码引入时，同时私有库依赖第三方c++ 库，podsepc 文件中如何设置 c++ 头文件的header search path ？</p>
+<p> 比如引入 protobuf 库，<code>.pb.cc</code> 文件中引入头文件 <code>#include &lt;google/protobuf/stubs/common.h&gt;</code>, 如何可以在不更改头文件引入方式及使用方不手动添加 <code>header search path</code> 的情况下引入 protobuf。</p>
+</li>
+</ol>
+<h2 id="参考文件"><a href="#参考文件" class="headerlink" title="参考文件"></a>参考文件</h2><p><a target="_blank" rel="noopener" href="https://juejin.im/entry/5c067eb56fb9a04a0a5ef583">CocoaPods使用</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/f841e248bc4f">cocoapods系列教程—spec文件</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5b1cfaff6fb9a01e417b6051">我所理解的 CocoaPods</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/36e2a621a45e">使用CocoaPods开发lib库</a><br><a target="_blank" rel="noopener" href="https://juejin.im/post/5ca5d483f265da30a726eaeb">iOS 组件化 使用cocoapods集成实战演练</a><br><a target="_blank" rel="noopener" href="https://juejin.im/entry/59dd94b06fb9a0451463030b">Cocoapods原理总结</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/cocoapods/" rel="tag"># cocoapods</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/26/tcp-%E6%8B%A5%E5%A1%9E%E6%8E%A7%E5%88%B6%E8%AF%A6%E8%A7%A3/" rel="prev" title="TCP 拥塞控制详解">
+      <i class="fa fa-chevron-left"></i> TCP 拥塞控制详解
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-cocoapods"><span class="nav-text">使用 cocoapods</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-Podfile"><span class="nav-text">创建 Podfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91-Podfile"><span class="nav-text">编辑 Podfile</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85"><span class="nav-text">安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E6%94%AF%E6%8C%81-cocoapod"><span class="nav-text">开源项目支持 cocoapod</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA-podspec-%E6%96%87%E4%BB%B6"><span class="nav-text">新建 podspec 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91podspec%E6%96%87%E4%BB%B6"><span class="nav-text">编辑podspec文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E6%94%AF%E6%96%B0%E5%BB%BAtag%EF%BC%8C%E5%B9%B6%E6%8E%A8%E9%80%81%E5%88%B0%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93"><span class="nav-text">分支新建tag，并推送到远程仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81podspec%E6%96%87%E4%BB%B6%EF%BC%8C%E8%A7%A3%E5%86%B3%E6%8F%90%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">验证podspec文件，解决提示的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%87%B3CocoaPods"><span class="nav-text">提交至CocoaPods</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E9%97%AE%E9%A2%98"><span class="nav-text">其他问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A7%81%E6%9C%89%E5%BA%93%E5%A2%9E%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-text">私有库增加依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE-arc-%E6%88%96%E8%80%85-mrc"><span class="nav-text">设置 arc 或者 mrc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Header-Search-Path"><span class="nav-text">Header Search Path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Library-Framework-Search-Path"><span class="nav-text">Library&#x2F;Framework Search Path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0-pch-%E6%96%87%E4%BB%B6"><span class="nav-text">添加 pch 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%AF%E6%8C%81-c"><span class="nav-text">支持 c++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E7%B3%BB%E7%BB%9F%E5%BA%93"><span class="nav-text">引入系统库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAsubspec"><span class="nav-text">创建subspec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98"><span class="nav-text">遗留问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E4%BB%B6"><span class="nav-text">参考文件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Baiya</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Baiya</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz","app_key":"nTz617bzWhN9TKo3rlYI2KHG","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : '58d9c912a7703032deaec7d09069fc89',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz',
+      appKey     : 'nTz617bzWhN9TKo3rlYI2KHG',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
