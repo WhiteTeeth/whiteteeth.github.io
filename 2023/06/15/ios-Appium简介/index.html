@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="该文档为 Appium 的使用介绍，使用 chatgpt 编写。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Appium 简介">
+<meta property="og:url" content="http://example.com/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="Baiya&#39;s Blog">
+<meta property="og:description" content="该文档为 Appium 的使用介绍，使用 chatgpt 编写。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2023-06-15T07:48:00.000Z">
+<meta property="article:modified_time" content="2023-06-15T07:49:18.938Z">
+<meta property="article:author" content="Baiya">
+<meta property="article:tag" content="iOS">
+<meta property="article:tag" content="Appium">
+<meta property="article:tag" content="自动化测试框架">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>Appium 简介 | Baiya's Blog</title>
+  
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?110151ea5147473925df3baed5fc3137";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Baiya's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Baiya">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Baiya's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Appium 简介
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-06-15 15:48:00 / Modified: 15:49:18" itemprop="dateCreated datePublished" datetime="2023-06-15T15:48:00+08:00">2023-06-15</time>
+            </span>
+
+          
+            <span id="/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/" class="post-meta-item leancloud_visitors" data-flag-title="Appium 简介" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/06/15/ios-Appium%E7%AE%80%E4%BB%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>该文档为 Appium 的使用介绍，使用 chatgpt 编写。</p>
+<span id="more"></span>
+
+<h1 id="Appium-简介"><a href="#Appium-简介" class="headerlink" title="Appium 简介"></a>Appium 简介</h1><p>该文档使用 chatgpt 编写。</p>
+<h2 id="一、什么是-appium"><a href="#一、什么是-appium" class="headerlink" title="一、什么是 appium"></a>一、什么是 appium</h2><p>Appium是一种开源的自动化测试框架，用于测试移动应用程序。它支持多种编程语言，包括Java、Python、Ruby、JavaScript等，可以在多个平台上运行，包括iOS、Android和Windows平台。Appium的主要目标是提供一种跨平台的自动化测试解决方案，使开发人员能够在不同的平台上使用相同的测试代码。</p>
+<p>Appium的优点包括跨平台支持、多语言支持、开源免费、支持多种测试类型、易于使用、支持多种测试工具等。但是，Appium也存在一些缺点，包括配置复杂、稳定性不足、不支持混合应用程序、不支持图像识别、不支持录制回放等。</p>
+<p>总之，Appium是一种功能强大的自动化测试框架，可以帮助开发人员快速编写测试脚本，提高测试效率和质量。但在使用Appium时，需要仔细考虑其优缺点，并采取相应的措施来解决问题。</p>
+<h2 id="二、Appium的工作原理"><a href="#二、Appium的工作原理" class="headerlink" title="二、Appium的工作原理"></a>二、Appium的工作原理</h2><p>Appium的工作原理是基于WebDriver协议的。WebDriver协议是一种用于自动化Web浏览器的协议，Appium使用这个协议来自动化移动应用程序。Appium通过启动一个HTTP服务器来监听客户端的请求。客户端通过发送HTTP请求到Appium服务器来控制设备或模拟器上的应用程序。Appium服务器接收请求并将其转换为相应的设备或模拟器上的操作。Appium服务器还负责与设备或模拟器通信，以便执行测试操作。</p>
+<h3 id="Appium的核心组件"><a href="#Appium的核心组件" class="headerlink" title="Appium的核心组件"></a>Appium的核心组件</h3><ol>
+<li>Appium Server：Appium服务器是Appium的核心组件，它负责与设备或模拟器通信，并执行测试操作。</li>
+<li>Appium Client：Appium客户端是测试脚本，它通过发送命令到Appium服务器来控制设备或模拟器上的应用程序。</li>
+<li>Appium Inspector：Appium Inspector是一个图形用户界面工具，用于查看应用程序的UI元素和属性。</li>
+<li>Appium Desired Capabilities：Appium Desired Capabilities是一组键值对，用于指定测试环境和应用程序的配置信息。</li>
+<li>Appium Drivers：Appium Drivers是用于与设备或模拟器通信的驱动程序，包括iOS驱动程序、Android驱动程序和Windows驱动程序。</li>
+</ol>
+<h2 id="三、安装Appium"><a href="#三、安装Appium" class="headerlink" title="三、安装Appium"></a>三、安装Appium</h2><p>安装Appium需要以下步骤：</p>
+<ol>
+<li><p>安装Node.js：Appium是基于Node.js开发的，因此需要先安装Node.js。您可以从Node.js官方网站下载并安装Node.js。</p>
+</li>
+<li><p>安装Appium：您可以使用npm（Node.js包管理器）来安装Appium。在终端或命令行中输入以下命令来安装Appium：</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line">复制npm <span class="keyword">install</span> -g appium</span><br></pre></td></tr></table></figure></li>
+<li><p>安装Appium客户端库：您需要安装适用于您的编程语言的Appium客户端库。例如，如果您使用的是Java，则需要安装Java客户端库。您可以在Appium官方网站上找到适用于各种编程语言的客户端库。</p>
+</li>
+<li><p>安装Appium GUI：如果您想使用Appium GUI来管理和运行测试用例，则需要安装Appium GUI。您可以从Appium官方网站下载并安装Appium GUI。</p>
+</li>
+</ol>
+<h2 id="四、配置Appium"><a href="#四、配置Appium" class="headerlink" title="四、配置Appium"></a>四、配置Appium</h2><p>安装Appium后，您需要配置Appium以便使用。以下是配置Appium的步骤：</p>
+<ol>
+<li><p>启动Appium：在终端或命令行中输入以下命令来启动Appium：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">appium</span><br></pre></td></tr></table></figure></li>
+<li><p>配置Desired Capabilities：Desired Capabilities是一组键值对，用于指定测试环境和应用程序的配置信息。您需要在测试脚本中指定Desired Capabilities。以下是一个Java测试脚本中指定Desired Capabilities的示例：</p>
+<figure class="highlight reasonml"><table><tr><td class="code"><pre><span class="line">复制DesiredCapabilities capabilities = <span class="keyword">new</span> <span class="constructor">DesiredCapabilities()</span>;</span><br><span class="line">capabilities.set<span class="constructor">Capability(<span class="string">&quot;platformName&quot;</span>, <span class="string">&quot;Android&quot;</span>)</span>;</span><br><span class="line">capabilities.set<span class="constructor">Capability(<span class="string">&quot;platformVersion&quot;</span>, <span class="string">&quot;9.0&quot;</span>)</span>;</span><br><span class="line">capabilities.set<span class="constructor">Capability(<span class="string">&quot;deviceName&quot;</span>, <span class="string">&quot;Android Emulator&quot;</span>)</span>;</span><br><span class="line">capabilities.set<span class="constructor">Capability(<span class="string">&quot;app&quot;</span>, <span class="string">&quot;/path/to/app.apk&quot;</span>)</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p>连接设备或模拟器：您需要连接设备或模拟器以便执行测试操作。您可以使用adb命令来连接Android设备或模拟器，使用xcode命令来连接iOS设备或模拟器。</p>
+</li>
+<li><p>运行测试用例：在配置好Appium和测试脚本后，您可以运行测试用例。在终端或命令行中输入以下命令来运行测试用例：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mvn test</span><br></pre></td></tr></table></figure>
+
+<p>或者，您可以在Appium GUI中运行测试用例。</p>
+</li>
+</ol>
+<h2 id="五、Appium命令"><a href="#五、Appium命令" class="headerlink" title="五、Appium命令"></a>五、Appium命令</h2><p>以下是一些常用的Appium命令：</p>
+<ul>
+<li><p><code>appium</code>：启动Appium服务器。</p>
+</li>
+<li><p><code>appium -a &lt;ip_address&gt; -p &lt;port_number&gt;</code>：启动Appium服务器并指定IP地址和端口号。</p>
+</li>
+<li><p><code>appium -U &lt;device_udid&gt;</code>：连接指定的设备或模拟器。</p>
+</li>
+<li><p><code>appium -g &lt;log_file_path&gt;</code>：将日志输出到指定的文件中。</p>
+</li>
+<li><p><code>appium -r &lt;report_file_path&gt;</code>：生成测试报告并保存到指定的文件中。</p>
+</li>
+<li><p><code>appium -v</code>：显示Appium的版本信息。</p>
+</li>
+<li><p><code>appium-doctor</code>：检查Appium的环境设置并提供修复建议。</p>
+</li>
+<li><p><code>appium --relaxed-security</code>：启动Appium服务器并放宽安全限制。</p>
+</li>
+<li><p><code>appium --no-reset</code>：启动Appium服务器并禁用应用程序重置。</p>
+</li>
+<li><p><code>appium --session-override</code>：启动Appium服务器并覆盖现有的会话。</p>
+</li>
+<li><p><code>appium --log-level &lt;log_level&gt;</code>：启动Appium服务器并设置日志级别。</p>
+</li>
+<li><p><code>appium --chromedriver-executable &lt;chromedriver_path&gt;</code>：启动Appium服务器并指定ChromeDriver的路径。</p>
+</li>
+<li><p><code>appium --webdriveragent-port &lt;port_number&gt;</code>：启动Appium服务器并指定WebDriverAgent的端口号。</p>
+</li>
+</ul>
+<h3 id="Appium命令示例"><a href="#Appium命令示例" class="headerlink" title="Appium命令示例"></a>Appium命令示例</h3><p>以下是一些使用Appium命令的示例：</p>
+<ul>
+<li><p>启动Appium服务器并放宽安全限制：</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">appium <span class="comment">--relaxed-security</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动Appium服务器并禁用应用程序重置：</p>
+<figure class="highlight perl"><table><tr><td class="code"><pre><span class="line">appium --<span class="keyword">no</span>-<span class="keyword">reset</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动Appium服务器并覆盖现有的会话：</p>
+<figure class="highlight actionscript"><table><tr><td class="code"><pre><span class="line">appium --session-<span class="keyword">override</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动Appium服务器并设置日志级别：</p>
+<figure class="highlight gauss"><table><tr><td class="code"><pre><span class="line">appium --<span class="built_in">log</span>-level <span class="keyword">debug</span></span><br></pre></td></tr></table></figure></li>
+<li><p>启动Appium服务器并指定ChromeDriver的路径：</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><span class="line">appium --chromedriver-executable <span class="regexp">/path/</span>to/chromedriver</span><br></pre></td></tr></table></figure></li>
+<li><p>启动Appium服务器并指定WebDriverAgent的端口号：</p>
+<figure class="highlight ada"><table><tr><td class="code"><pre><span class="line">appium <span class="comment">--webdriveragent-port 8100</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="六、Appium测试用例设计最佳实践"><a href="#六、Appium测试用例设计最佳实践" class="headerlink" title="六、Appium测试用例设计最佳实践"></a>六、Appium测试用例设计最佳实践</h2><p>以下是一些关于Appium测试用例设计的最佳实践：</p>
+<ol>
+<li>使用Page Object模式：Page Object模式是一种设计模式，用于将页面对象和测试用例分离。使用Page Object模式可以使测试用例更易于维护和扩展。</li>
+<li>使用Desired Capabilities：Desired Capabilities是一组键值对，用于指定测试环境和应用程序的配置信息。使用Desired Capabilities可以使测试用例更具可移植性和可重用性。</li>
+<li>使用等待机制：等待机制是一种机制，用于等待应用程序加载和响应。使用等待机制可以使测试用例更稳定和可靠。</li>
+<li>使用断言：断言是一种机制，用于验证应用程序的状态和行为。使用断言可以使测试用例更具可靠性和可重复性。</li>
+<li>使用数据驱动测试：数据驱动测试是一种测试方法，用于使用不同的测试数据运行相同的测试用例。使用数据驱动测试可以使测试用例更具可扩展性和可重用性。</li>
+<li>使用异常处理：异常处理是一种机制，用于处理应用程序中的异常情况。使用异常处理可以使测试用例更具健壮性和可靠性。</li>
+</ol>
+<h3 id="Appium测试用例设计示例"><a href="#Appium测试用例设计示例" class="headerlink" title="Appium测试用例设计示例"></a>Appium测试用例设计示例</h3><p>以下是一个使用Page Object模式和Desired Capabilities的OC语言测试用例示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">复制@interface LoginTest : XCTestCase</span><br><span class="line">@property (nonatomic, strong) XCUIApplication *app;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LoginTest</span><br><span class="line"></span><br><span class="line">- (void)setUp &#123;</span><br><span class="line">    [super setUp];</span><br><span class="line">    self.continueAfterFailure = NO;</span><br><span class="line">    self.app = [[XCUIApplication alloc] init];</span><br><span class="line">    self.app.launchArguments = @[@&quot;-StartFromCleanState&quot;, @&quot;YES&quot;];</span><br><span class="line">    [self.app launch];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)tearDown &#123;</span><br><span class="line">    [super tearDown];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)testLogin &#123;</span><br><span class="line">    LoginPage *loginPage = [[LoginPage alloc] initWithApp:self.app];</span><br><span class="line">    HomePage *homePage = [loginPage loginWithUsername:@&quot;username&quot; password:@&quot;password&quot;];</span><br><span class="line">    XCTAssertTrue(homePage.isDisplayed);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、参考文档"><a href="#七、参考文档" class="headerlink" title="七、参考文档"></a>七、参考文档</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://appium.io/">Appium官方网站</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/appium/appium">Appium GitHub仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://appium.io/docs/en/about-appium/intro/">Appium技术文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.guru99.com/introduction-to-appium.html">Appium技术原理介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.toolsqa.com/mobile-automation/appium/appium-architecture-and-working/">Appium架构和工作原理介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://appium.io/docs/en/writing-running-appium/caps/">Appium Desired Capabilities介绍</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.browserstack.com/guide/appium-inspector-tutorial">Appium Inspector使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://appium.io/docs/en/about-appium/drivers/index.html">Appium Drivers介绍</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/iOS/" rel="tag"># iOS</a>
+              <a href="/tags/Appium/" rel="tag"># Appium</a>
+              <a href="/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6/" rel="tag"># 自动化测试框架</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/31/tools-CocoaPods-%E5%AE%9E%E8%B7%B5/" rel="prev" title="CocoaPods 实践">
+      <i class="fa fa-chevron-left"></i> CocoaPods 实践
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+      <div class="tabs tabs-comment">
+        <ul class="nav-tabs">
+            <li class="tab"><a href="#comment-gitalk">gitalk</a></li>
+            <li class="tab"><a href="#comment-valine">valine</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane gitalk" id="comment-gitalk">
+              <div class="comments" id="gitalk-container"></div>
+            </div>
+            <div class="tab-pane valine" id="comment-valine">
+              <div class="comments" id="valine-comments"></div>
+            </div>
+        </div>
+      </div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Appium-%E7%AE%80%E4%BB%8B"><span class="nav-text">Appium 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF-appium"><span class="nav-text">一、什么是 appium</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81Appium%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-text">二、Appium的工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Appium%E7%9A%84%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-text">Appium的核心组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85Appium"><span class="nav-text">三、安装Appium</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%85%8D%E7%BD%AEAppium"><span class="nav-text">四、配置Appium</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81Appium%E5%91%BD%E4%BB%A4"><span class="nav-text">五、Appium命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Appium%E5%91%BD%E4%BB%A4%E7%A4%BA%E4%BE%8B"><span class="nav-text">Appium命令示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81Appium%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-text">六、Appium测试用例设计最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Appium%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E8%AE%BE%E8%AE%A1%E7%A4%BA%E4%BE%8B"><span class="nav-text">Appium测试用例设计示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="nav-text">七、参考文档</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Baiya</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Baiya</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="Total Visitors">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="Total Views">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz","app_key":"nTz617bzWhN9TKo3rlYI2KHG","server_url":null,"security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'ce8c6d4734d54af7f015',
+      clientSecret: 'd5e6b0c8de898898c5cd50e2850f3b719fc70728',
+      repo        : 'whiteteeth.github.io',
+      owner       : 'WhiteTeeth',
+      admin       : ['WhiteTeeth'],
+      id          : 'b3dcb87f77d70a1ebd4306108d59b824',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : 'Xi1tArJjgkvJ5hk6h7GEBOg9-gzGzoHsz',
+      appKey     : 'nTz617bzWhN9TKo3rlYI2KHG',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : 'zh-cn' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
